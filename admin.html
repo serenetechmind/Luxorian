@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Luxora Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--bone:#f2efe8;--mute:#a39e92;--gold:#c9a24a;--line:#2a2721;--panel:#0d0c0a;--ok:#6fbf8b;--wait:#d9a94a;--no:#e5836b}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--bone);font:400 15px/1.6 Manrope,sans-serif}
+h1,h2{font-family:'Cormorant Garamond',serif;font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px}
+button,input,select,textarea{font:inherit;color:var(--bone)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn{background:var(--gold);color:#000;border:0;border-radius:2px;padding:10px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:14px}
+.btn.ghost{background:none;color:var(--bone);border:1px solid var(--line)}
+.btn.ok{background:var(--ok)}.btn.wait{background:var(--wait)}.btn.no{background:var(--no)}
+input,select,textarea{background:#000;border:1px solid var(--line);border-radius:2px;padding:10px 12px;width:100%}
+#login{max-width:380px;margin:18vh auto;padding:0 18px}
+#login h1{font-size:40px;margin-bottom:6px}
+#login input{margin:10px 0}
+.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:12px;flex-wrap:wrap}
+.top h1{font-size:34px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.tab{background:none;border:1px solid var(--line);padding:8px 14px;border-radius:2px;cursor:pointer;white-space:nowrap;color:var(--mute)}
+.tab.on{border-color:var(--gold);color:var(--bone)}
+.tab b{color:var(--gold);margin-left:4px}
+.filters{display:grid;gap:8px;margin:16px 0;grid-template-columns:1fr}
+@media(min-width:640px){.filters{grid-template-columns:2fr 1fr 1fr}}
+.card{background:var(--panel);border:1px solid var(--line);margin-bottom:14px;padding:18px}
+.card.approved{border-left:3px solid var(--ok)}.card.waitlisted{border-left:3px solid var(--wait)}.card.declined{border-left:3px solid var(--no)}
+.h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.h b{font-size:17px}
+.meta{color:var(--mute);font-size:13px}
+.pill{font-size:12px;border:1px solid var(--line);padding:2px 10px;border-radius:20px;color:var(--mute)}
+.why{margin:12px 0;white-space:pre-wrap}
+.lbl{color:var(--mute);font-size:13px;margin-top:10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chips span{border:1px solid var(--line);padding:2px 10px;font-size:13px}
+.more{display:none;margin-top:6px;border-top:1px solid var(--line);padding-top:8px}
+.more.on{display:block}
+.stars button{background:none;border:0;font-size:20px;cursor:pointer;color:var(--line);padding:0 2px}
+.stars button.on{color:var(--gold)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.note{margin-top:12px;min-height:60px}
+.empty{text-align:center;color:var(--mute);padding:60px 0}
+#msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;padding:10px 18px;font-weight:700;display:none}
+.demo{background:var(--panel);border:1px solid var(--gold);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
+</style>
+</head>
+<body>
+
+<div id="login">
+<h1>Luxora admin</h1>
+<p class="meta">Sign in to review applications.</p>
+<input type="email" id="em" placeholder="Admin email" autocomplete="username">
+<input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+<button class="btn" id="go" style="width:100%">Sign in</button>
+<p class="meta" id="lerr" style="color:var(--no);margin-top:10px"></p>
+</div>
+
+<div id="app" style="display:none"><div class="wrap">
+<div class="top"><h1>Applications</h1><div class="tools"><button class="btn ghost" id="csv">Export CSV</button><button class="btn ghost" id="out">Sign out</button></div></div>
+<div class="demo" id="demo">Demo mode: showing sample data. Add FIREBASE_CONFIG to use real applications.</div>
+<div class="tabs" id="tabs"></div>
+<div class="filters">
+<input type="search" id="q" placeholder="Search name, email, country, goal">
+<select id="fage"><option value="">All ages</option><option>13–17</option><option>18–24</option><option>25–30</option><option>31–40</option><option>41+</option></select>
+<select id="farea"><option value="">All growth areas</option></select>
+</div>
+<div id="list"></div>
+</div></div>
+<div id="msg"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
+<script>
+// Use the same Firebase web config as index.html
+var FIREBASE_CONFIG = null;
+// Paste your WhatsApp group invite link here. It is added to the approval message.
+var GROUP_LINK = "https://chat.whatsapp.com/YOUR_LINK";
+var COL = 'luxora_applications';
+
+var db=null, auth=null, apps=[], tab='pending';
+var STATUSES=['pending','approved','waitlisted','declined'];
+var LABEL={pending:'Pending',approved:'Approved',waitlisted:'Waitlisted',declined:'Declined'};
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function toast(t){var m=$('msg');m.textContent=t;m.style.display='block';setTimeout(function(){m.style.display='none'},1800)}
+
+var SAMPLE=[{id:'s1',name:'Amara Okoye',email:'amara@example.com',whatsapp:'+2348012345678',gender:'Female',age:'25–30',country:'Nigeria',city:'Lagos',status:'Entrepreneur / Freelancer',active:'Evening',goal:'Launch my first product',why:'I have been building alone for two years and I keep dropping my own plans. I want to be around people who execute and hold each other to a standard.',blocker:'Inconsistency and overthinking.',areas:['Consistency, discipline and daily systems','Career clarity and skill positioning'],outcome:'Ship my product in 90 days',ready:'5',hours:'3–5 hours',contribute:'Design feedback and accountability.',before:'No',heard:'Instagram',referredBy:'',status_review:'pending',adminNote:'',rating:0,createdAt:new Date().toISOString()}];
+
+if(FIREBASE_CONFIG){firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();auth=firebase.auth()}
+
+function start(){
+  $('login').style.display='none';$('app').style.display='block';
+  if(!db){$('demo').style.display='block';apps=SAMPLE;render();return}
+  db.collection(COL).orderBy('createdAt','desc').onSnapshot(function(s){
+    apps=s.docs.map(function(d){var x=d.data();x.id=d.id;return x});render();
+  },function(e){console.error(e);toast('Could not load applications')});
+}
+if(auth){auth.onAuthStateChanged(function(u){if(u)start();else{$('login').style.display='block';$('app').style.display='none'}})}
+$('go').onclick=function(){
+  if(!auth){start();return}
+  auth.signInWithEmailAndPassword($('em').value.trim(),$('pw').value).catch(function(){$('lerr').textContent='Email or password is incorrect.'});
+};
+$('out').onclick=function(){auth?auth.signOut():location.reload()};
+
+function st(a){return a.status_review||'pending'}
+function render(){
+  var counts={all:apps.length};STATUSES.forEach(function(s){counts[s]=apps.filter(function(a){return st(a)===s}).length});
+  $('tabs').innerHTML=STATUSES.map(function(s){return '<button class="tab'+(tab===s?' on':'')+'" data-t="'+s+'">'+LABEL[s]+'<b>'+counts[s]+'</b></button>'}).join('')+'<button class="tab'+(tab==='all'?' on':'')+'" data-t="all">All<b>'+counts.all+'</b></button>';
+  var areas={};apps.forEach(function(a){(a.areas||[]).forEach(function(x){areas[x]=1})});
+  var sel=$('farea'),cv=sel.value;
+  if(sel.options.length-1!==Object.keys(areas).length){sel.innerHTML='<option value="">All growth areas</option>'+Object.keys(areas).map(function(x){return '<option>'+esc(x)+'</option>'}).join('');sel.value=cv}
+  var q=$('q').value.toLowerCase(),ag=$('fage').value,ar=sel.value;
+  var rows=apps.filter(function(a){
+    if(tab!=='all'&&st(a)!==tab)return false;
+    if(ag&&a.age!==ag)return false;
+    if(ar&&(a.areas||[]).indexOf(ar)<0)return false;
+    return !q||[a.name,a.email,a.country,a.city,a.goal,a.outcome].join(' ').toLowerCase().indexOf(q)>=0;
+  });
+  $('list').innerHTML=rows.length?rows.map(card).join(''):'<div class="empty">No applications here yet.</div>';
+}
+function card(a){
+  var s=st(a),r=+a.rating||0,stars='';
+  for(var i=1;i<=5;i++)stars+='<button data-star="'+i+'" data-id="'+esc(a.id)+'" class="'+(i<=r?'on':'')+'" aria-label="Rate '+i+'">★</button>';
+  var date=a.createdAt?new Date(a.createdAt).toLocaleDateString():'';
+  function row(k,v){return v?'<div class="lbl">'+k+'</div><div>'+esc(v)+'</div>':''}
+  return '<div class="card '+s+'"><div class="h"><div><b>'+esc(a.name)+'</b><div class="meta">'+esc(a.age)+' · '+esc(a.gender)+' · '+esc(a.city)+', '+esc(a.country)+' · '+esc(date)+'</div></div><span class="pill">'+LABEL[s]+'</span></div>'
+  +'<div class="why">'+esc(a.why)+'</div>'
+  +'<div class="chips">'+(a.areas||[]).map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</div>'
+  +row('Goal',a.goal)+row('Outcome wanted',a.outcome)
+  +'<div class="more" id="m-'+esc(a.id)+'">'+row('What has stopped them',a.blocker)+row('Can contribute',a.contribute)+row('Status',a.status)+row('Readiness (1–5)',a.ready)+row('Hours per week',a.hours)+row('Most active on WhatsApp',a.active)+row('Community before',a.before)+row('Heard via',a.heard+(a.referredBy?' (referred by '+a.referredBy+')':''))+row('Email',a.email)+row('WhatsApp',a.whatsapp)+'</div>'
+  +'<div class="stars" style="margin-top:10px">'+stars+'</div>'
+  +'<textarea class="note" data-note="'+esc(a.id)+'" placeholder="Admin note (saves when you click away)">'+esc(a.adminNote||'')+'</textarea>'
+  +'<div class="acts"><button class="btn ok" data-set="approved" data-id="'+esc(a.id)+'">Approve</button><button class="btn wait" data-set="waitlisted" data-id="'+esc(a.id)+'">Waitlist</button><button class="btn no" data-set="declined" data-id="'+esc(a.id)+'">Decline</button>'
+  +(s!=='pending'?'<button class="btn ghost" data-set="pending" data-id="'+esc(a.id)+'">Reset</button>':'')
+  +'<button class="btn ghost" data-more="'+esc(a.id)+'">Details</button>'
+  +(s!=='pending'?'<a class="btn" target="_blank" rel="noopener" href="'+wa(a)+'">Message on WhatsApp</a>':'')
+  +'</div></div>';
+}
+function wa(a){
+  var n=(a.name||'').split(' ')[0],s=st(a),t;
+  if(s==='approved')t='Hi '+n+', welcome to the Luxora Circle! Your application has been approved. Join the community here: '+GROUP_LINK+'\n\nWe are glad to have you. Show up, contribute and grow with us.';
+  else if(s==='waitlisted')t='Hi '+n+', thank you for applying to the Luxora Circle. We loved your application and have placed you on our waitlist. We will message you as soon as a place opens.';
+  else t='Hi '+n+', thank you for applying to the Luxora Circle and for the time you put into your answers. We are not able to offer you a place right now. You are welcome to apply again in future.';
+  return 'https://wa.me/'+String(a.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(t);
+}
+function save(id,patch){
+  var a=apps.filter(function(x){return x.id===id})[0];if(!a)return;
+  for(var k in patch)a[k]=patch[k];
+  if(db)db.collection(COL).doc(id).update(patch).catch(function(){toast('Save failed. Check your connection.')});
+  render();
+}
+document.addEventListener('click',function(e){
+  var t=e.target;
+  if(t.dataset.t){tab=t.dataset.t;render()}
+  else if(t.dataset.set){save(t.dataset.id,{status_review:t.dataset.set});toast(LABEL[t.dataset.set])}
+  else if(t.dataset.star){var a=apps.filter(function(x){return x.id===t.dataset.id})[0];save(t.dataset.id,{rating:+a.rating===+t.dataset.star?0:+t.dataset.star})}
+  else if(t.dataset.more){$('m-'+t.dataset.more).classList.toggle('on')}
+});
+document.addEventListener('focusout',function(e){
+  var id=e.target.dataset&&e.target.dataset.note;if(!id)return;
+  var a=apps.filter(function(x){return x.id===id})[0];
+  if(a&&a.adminNote!==e.target.value){a.adminNote=e.target.value;if(db)db.collection(COL).doc(id).update({adminNote:e.target.value});toast('Note saved')}
+});
+['q','fage','farea'].forEach(function(i){$(i).addEventListener('input',render)});
+
+$('csv').onclick=function(){
+  var cols=['createdAt','status_review','rating','name','email','whatsapp','gender','age','country','city','status','active','goal','why','blocker','areas','outcome','ready','hours','contribute','before','heard','referredBy','adminNote'];
+  function c(v){v=Array.isArray(v)?v.join('; '):(v==null?'':String(v));if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'}
+  var csv=[cols.join(',')].concat(apps.map(function(a){return cols.map(function(k){return c(a[k])}).join(',')})).join('\n');
+  var l=document.createElement('a');l.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));l.download='luxora-applications.csv';l.click();
+};
+if(!auth)start();
+</script>
+</body>
+</html>

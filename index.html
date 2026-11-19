@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luxora Circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--bone:#f2efe8;--mute:#a39e92;--gold:#c9a24a;--line:#2a2721;--panel:#0d0c0a}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--bone);font:400 16px/1.65 Manrope,sans-serif}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.1}
+a{color:inherit}
+.wrap{max-width:680px;margin:0 auto;padding:0 22px}
+.hero{position:relative;text-align:center;padding:72px 0 96px;overflow:hidden}
+.hero::before{content:"";position:absolute;left:50%;top:-40px;width:900px;height:900px;transform:translateX(-50%);
+background:repeating-conic-gradient(from 0deg at 50% 38%,rgba(201,162,74,.22) 0 2deg,transparent 2deg 9deg);
+-webkit-mask:radial-gradient(circle at 50% 38%,#000 0,transparent 62%);mask:radial-gradient(circle at 50% 38%,#000 0,transparent 62%);
+animation:rise 2.4s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateX(-50%) scale(.6)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+.hero>*{position:relative}
+.logo{width:min(300px,70vw);filter:invert(1);mix-blend-mode:screen;display:block;margin:0 auto 56px}
+.hero h1{font-size:clamp(38px,9vw,64px);max-width:12em;margin:0 auto 22px}
+.hero p{color:var(--mute);max-width:30em;margin:0 auto 34px}
+.btn{display:inline-block;background:var(--gold);color:#000;font:700 15px Manrope,sans-serif;border:0;border-radius:2px;padding:15px 30px;cursor:pointer;text-decoration:none}
+.btn:hover{background:#dab85f}
+.btn.ghost{background:none;color:var(--bone);border:1px solid var(--line)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+section{padding:64px 0;border-top:1px solid var(--line)}
+section h2{font-size:clamp(30px,6vw,42px);margin-bottom:18px}
+section p{color:var(--mute);margin-bottom:14px}
+.steps{list-style:none;padding:0;display:grid;gap:18px;margin-top:22px}
+.steps li{border-left:2px solid var(--gold);padding-left:16px}
+.steps b{display:block;color:var(--bone)}
+.steps span{color:var(--mute)}
+.vals{display:grid;gap:14px;margin-top:20px}
+.vals div{padding:16px 18px;background:var(--panel);border:1px solid var(--line)}
+.vals b{display:block;margin-bottom:2px}
+#apply{background:var(--panel)}
+.bar{height:3px;background:var(--line);margin:26px 0 8px}
+.bar i{display:block;height:100%;width:33%;background:var(--gold);transition:width .35s}
+.stepname{color:var(--mute);font-size:14px;margin-bottom:22px}
+.step{display:none}.step.on{display:block}
+label.q,.q{display:block;font-weight:500;margin:22px 0 8px}
+.hint{color:var(--mute);font-size:13px;font-weight:400;display:block}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;background:#000;color:var(--bone);border:1px solid var(--line);border-radius:2px;padding:13px 14px;font:inherit}
+textarea{min-height:150px;resize:vertical}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);background:#000;cursor:pointer;color:var(--bone);font-size:15px}
+.opt input{accent-color:var(--gold);margin-top:5px}
+.opt:has(input:checked){border-color:var(--gold)}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale .opt{justify-content:center;padding:12px 0}
+.row{display:grid;gap:0 14px}
+@media(min-width:560px){.row{grid-template-columns:1fr 1fr}}
+.nav{display:flex;gap:12px;justify-content:space-between;margin-top:34px}
+.err{color:#e5836b;font-size:14px;margin-top:10px;min-height:20px}
+.note{font-size:14px;color:var(--gold);margin-top:8px;display:none}
+.count{font-size:13px;color:var(--mute);text-align:right}
+.done{display:none;text-align:center;padding:30px 0}
+.done h3{font-size:36px;margin-bottom:12px}
+details{border-top:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:500}
+details p{margin:10px 0 0}
+footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+@media(prefers-reduced-motion:reduce){.hero::before{animation:none}html{scroll-behavior:auto}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+<img class="logo" src="logo.jpg" alt="Luxora">
+<h1>Awaken to who you are. Become who you choose to be.</h1>
+<p>Luxora Circle is a members-only community for people who are intentionally becoming. We show up weekly, we do the work, and we grow together.</p>
+<a class="btn" href="#apply">Apply to join</a>
+</div></header>
+
+<section><div class="wrap">
+<h2>The Awakening</h2>
+<p>The symbol is light breaking upward. Its rising forms stand for growth and the slow unfolding of potential, and the open centre is the moment of clarity that comes with self-awareness.</p>
+<p>Luxora is about intentional becoming: finding out who you truly are, getting clear, and growing into that identity on purpose.</p>
+</div></section>
+
+<section><div class="wrap">
+<h2>How joining works</h2>
+<ul class="steps">
+<li><b>Apply</b><span>Fill the form. It takes about 8 minutes, and your written answers matter.</span></li>
+<li><b>We review</b><span>Every application is read by a person. Not everyone is accepted straight away.</span></li>
+<li><b>You hear from us on WhatsApp</b><span>If approved, you get a welcome message and your entry into the Circle.</span></li>
+</ul>
+</div></section>
+
+<section><div class="wrap">
+<h2>What we expect from you</h2>
+<div class="vals">
+<div><b>Show up weekly</b><span style="color:var(--mute)">Luxora runs on participation and execution, not observation.</span></div>
+<div><b>Contribute</b><span style="color:var(--mute)">Bring your skill, your story or your questions.</span></div>
+<div><b>Respect and confidentiality</b><span style="color:var(--mute)">What members share stays in the Circle. No spam, no promotion without approval.</span></div>
+</div>
+</div></section>
+
+<section id="apply"><div class="wrap">
+<h2>Member entry form</h2>
+<p>Answer honestly. Short answers get passed over.</p>
+<div class="bar"><i id="fill"></i></div>
+<div class="stepname" id="sname">Step 1 of 3: About you</div>
+
+<form id="f" novalidate>
+<div class="step on" data-name="About you">
+<div class="row">
+<div><label class="q" for="name">Full name</label><input type="text" id="name" name="name" autocomplete="name" required></div>
+<div><label class="q" for="email">Email address</label><input type="email" id="email" name="email" autocomplete="email" required></div>
+</div>
+<label class="q" for="wa">WhatsApp number<span class="hint">Include your country code, e.g. +234</span></label>
+<input type="tel" id="wa" name="whatsapp" placeholder="+234 801 234 5678" required>
+<div class="row">
+<div><span class="q">Gender</span><div class="opts">
+<label class="opt"><input type="radio" name="gender" value="Female" required> Female</label>
+<label class="opt"><input type="radio" name="gender" value="Male"> Male</label></div></div>
+<div><label class="q" for="age">Age</label><select id="age" name="age" required>
+<option value="">Select</option><option>13–17</option><option>18–24</option><option>25–30</option><option>31–40</option><option>41+</option></select>
+<p class="note" id="minor">Members under 18 need a parent or guardian's consent before they can be approved.</p></div>
+</div>
+<div class="row">
+<div><label class="q" for="country">Country</label><input type="text" id="country" name="country" required></div>
+<div><label class="q" for="city">City</label><input type="text" id="city" name="city" required></div>
+</div>
+<label class="q" for="status">Current status</label>
+<select id="status" name="status" required><option value="">Select</option><option>Secondary School Student</option><option>Undergraduate Student</option><option>Graduate</option><option>Employed / Working Professional</option><option>Entrepreneur / Freelancer</option><option>Other</option></select>
+<span class="q">When are you most active on WhatsApp?</span>
+<div class="opts" data-req="active">
+<label class="opt"><input type="radio" name="active" value="Morning"> Morning (8:00 AM – 10:00 AM)</label>
+<label class="opt"><input type="radio" name="active" value="Afternoon"> Afternoon (1:00 PM – 3:00 PM)</label>
+<label class="opt"><input type="radio" name="active" value="Evening"> Evening (7:00 PM – 10:00 PM)</label>
+<label class="opt"><input type="radio" name="active" value="Late night"> Late night (after 10:00 PM)</label>
+</div>
+</div>
+
+<div class="step" data-name="Intent and alignment">
+<label class="q" for="goal">What is your biggest goal in this season of your life?</label>
+<input type="text" id="goal" name="goal" required>
+<label class="q" for="why">Why do you want to join the Luxora Circle right now?<span class="hint">Take your time. Write at least 150 characters.</span></label>
+<textarea id="why" name="why" required></textarea><div class="count" id="cnt">0 / 150</div>
+<label class="q" for="block">What has stopped you from growing so far?</label>
+<textarea id="block" name="blocker" style="min-height:100px" required></textarea>
+<span class="q">Where do you need the most growth and support? <span class="hint">Choose 2</span></span>
+<div class="opts" id="areas" data-req="areas">
+<label class="opt"><input type="checkbox" name="areas" value="Identity, mindset and unlearning old habits"> Personal identity, mindset and unlearning old habits</label>
+<label class="opt"><input type="checkbox" name="areas" value="Career clarity and skill positioning"> Career clarity and skill positioning</label>
+<label class="opt"><input type="checkbox" name="areas" value="Consistency, discipline and daily systems"> Consistency, discipline and daily systems</label>
+<label class="opt"><input type="checkbox" name="areas" value="Spiritual alignment and purpose"> Spiritual alignment and purpose</label>
+<label class="opt"><input type="checkbox" name="areas" value="Relationships and emotional intelligence"> Relationships and emotional intelligence</label>
+<label class="opt"><input type="checkbox" name="areas" value="Health, fitness and wellbeing"> Health, fitness and wellbeing</label>
+<label class="opt"><input type="checkbox" name="areas" value="Finance and wealth habits"> Finance and wealth habits</label>
+</div>
+<label class="q" for="outcome">What ONE specific outcome do you want from this community?</label>
+<input type="text" id="outcome" name="outcome" required>
+</div>
+
+<div class="step" data-name="Commitment">
+<span class="q">Luxora is built on participation and execution. How ready are you to show up, contribute and engage weekly?<span class="hint">1 is not ready, 5 is fully ready</span></span>
+<div class="scale" data-req="ready">
+<label class="opt"><input type="radio" name="ready" value="1">1</label><label class="opt"><input type="radio" name="ready" value="2">2</label><label class="opt"><input type="radio" name="ready" value="3">3</label><label class="opt"><input type="radio" name="ready" value="4">4</label><label class="opt"><input type="radio" name="ready" value="5">5</label>
+</div>
+<label class="q" for="hours">How many hours a week can you give to the Circle?</label>
+<select id="hours" name="hours" required><option value="">Select</option><option>1–2 hours</option><option>3–5 hours</option><option>6+ hours</option></select>
+<label class="q" for="contrib">What can you contribute to the Circle?<span class="hint">A skill, a gift, a perspective, a habit you can model</span></label>
+<textarea id="contrib" name="contribute" style="min-height:100px" required></textarea>
+<span class="q">Have you been part of a community like this before?</span>
+<div class="opts" data-req="before">
+<label class="opt"><input type="radio" name="before" value="Yes"> Yes</label>
+<label class="opt"><input type="radio" name="before" value="No"> No</label></div>
+<div class="row">
+<div><label class="q" for="heard">How did you hear about Luxora Circle?</label>
+<select id="heard" name="heard" required><option value="">Select</option><option>WhatsApp</option><option>Instagram</option><option>X / Twitter</option><option>TikTok</option><option>A friend or member</option><option>Other</option></select></div>
+<div><label class="q" for="ref">Referred by <span class="hint">Optional</span></label><input type="text" id="ref" name="referredBy"></div>
+</div>
+<div class="opts" style="margin-top:26px">
+<label class="opt"><input type="checkbox" id="c1"> I commit to showing up weekly.</label>
+<label class="opt"><input type="checkbox" id="c2"> I agree to respect other members, keep what is shared confidential and not spam the Circle.</label>
+</div>
+</div>
+
+<div class="err" id="err" role="alert"></div>
+<div class="nav"><button type="button" class="btn ghost" id="back" style="visibility:hidden">Back</button><button type="button" class="btn" id="next">Continue</button></div>
+</form>
+
+<div class="done" id="done">
+<h3>Application received</h3>
+<p>Thank you for applying. We review every application personally, and if you are approved we will message you on WhatsApp. Keep your phone close.</p>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Questions</h2>
+<details><summary>Is everyone who applies accepted?</summary><p>No. Each application is reviewed, and we may approve, waitlist or decline.</p></details>
+<details><summary>How long does review take?</summary><p>You will hear from us on WhatsApp once your application has been reviewed.</p></details>
+<details><summary>Is Luxora Circle free?</summary><p>Ask us on WhatsApp if you are unsure. Details are shared with approved members.</p></details>
+<details><summary>Can I join if I am under 18?</summary><p>Yes, with a parent or guardian's consent.</p></details>
+</div></section>
+<footer>Luxora Circle. Awaken to who you are.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
+<script>
+// 1) Paste your Firebase web config here
+var FIREBASE_CONFIG = null; // e.g. {apiKey:"...",authDomain:"...",projectId:"..."}
+var db = null;
+try{ if(FIREBASE_CONFIG){ firebase.initializeApp(FIREBASE_CONFIG); db = firebase.firestore(); } }catch(e){ console.error(e); }
+
+var steps=[].slice.call(document.querySelectorAll('.step')), cur=0;
+var f=document.getElementById('f'), err=document.getElementById('err'), nextB=document.getElementById('next'), backB=document.getElementById('back');
+function show(i){
+  cur=i; steps.forEach(function(s,k){s.classList.toggle('on',k===i)});
+  document.getElementById('fill').style.width=((i+1)/steps.length*100)+'%';
+  document.getElementById('sname').textContent='Step '+(i+1)+' of '+steps.length+': '+steps[i].dataset.name;
+  backB.style.visibility=i?'visible':'hidden';
+  nextB.textContent=i===steps.length-1?'Submit application':'Continue';
+  err.textContent=''; document.getElementById('apply').scrollIntoView();
+}
+function valid(i){
+  var s=steps[i];
+  var fields=[].slice.call(s.querySelectorAll('input[type=text],input[type=email],input[type=tel],select,textarea')).filter(function(x){return x.required});
+  for(var k=0;k<fields.length;k++){ if(!fields[k].value.trim()){fields[k].focus();return 'Please fill in every required question.'} }
+  var em=s.querySelector('#email'); if(em&&!/^\S+@\S+\.\S+$/.test(em.value)){em.focus();return 'Enter a valid email address.'}
+  var wa=s.querySelector('#wa'); if(wa&&!/^\+\d{8,15}$/.test(wa.value.replace(/[\s-]/g,''))){wa.focus();return 'Enter your WhatsApp number with country code, e.g. +234 801 234 5678.'}
+  if(s.querySelector('[name=gender]')&&!f.gender.value) return 'Select your gender.';
+  var req=s.querySelectorAll('[data-req]');
+  for(k=0;k<req.length;k++){
+    var n=req[k].dataset.req;
+    if(n==='areas'){ if(f.querySelectorAll('[name=areas]:checked').length!==2) return 'Choose exactly 2 growth areas.'; }
+    else if(!f[n].value) return 'Please answer every question on this step.';
+  }
+  if(s.querySelector('#why')&&f.why.value.trim().length<150) return 'Tell us more about why you want to join (at least 150 characters).';
+  if(s.querySelector('#c1')&&!(document.getElementById('c1').checked&&document.getElementById('c2').checked)) return 'Tick both commitments to submit.';
+  return '';
+}
+nextB.onclick=function(){
+  var m=valid(cur); if(m){err.textContent=m;return}
+  if(cur<steps.length-1){show(cur+1);return}
+  submit();
+};
+backB.onclick=function(){show(cur-1)};
+f.addEventListener('change',function(e){
+  if(e.target.name==='areas'&&f.querySelectorAll('[name=areas]:checked').length>2){e.target.checked=false;err.textContent='You can choose only 2 areas.'}
+  if(e.target.id==='age')document.getElementById('minor').style.display=e.target.value==='13–17'?'block':'none';
+});
+document.getElementById('why').addEventListener('input',function(){document.getElementById('cnt').textContent=this.value.trim().length+' / 150'});
+
+function submit(){
+  var d={};
+  ['name','email','whatsapp','gender','age','country','city','status','active','goal','why','blocker','outcome','ready','hours','contribute','before','heard','referredBy'].forEach(function(k){d[k]=(f[k].value||'').trim()});
+  d.areas=[].map.call(f.querySelectorAll('[name=areas]:checked'),function(x){return x.value});
+  d.whatsapp=d.whatsapp.replace(/[\s-]/g,'');
+  d.status_review='pending'; d.adminNote=''; d.createdAt=new Date().toISOString();
+  nextB.disabled=true; nextB.textContent='Submitting…';
+  var p=db?db.collection('luxora_applications').add(d):Promise.resolve(console.log('Demo mode, add FIREBASE_CONFIG to save:',d));
+  p.then(function(){
+    f.style.display='none'; document.querySelector('.bar').style.display='none'; document.getElementById('sname').style.display='none';
+    document.getElementById('done').style.display='block';
+  }).catch(function(e){
+    console.error(e); nextB.disabled=false; nextB.textContent='Submit application';
+    err.textContent='Your application did not send. Check your connection and submit again.';
+  });
+}
+show(0);
+</script>
+</body>
+</html>
