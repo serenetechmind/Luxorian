@@ -205,7 +205,14 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
 <script>
 // 1) Paste your Firebase web config here
-var FIREBASE_CONFIG = null; // e.g. {apiKey:"...",authDomain:"...",projectId:"..."}
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCJ3zfZTdylHCev8ucrtOM-ljpKBMt9RhE",
+  authDomain: "luxoria-99c72.firebaseapp.com",
+  projectId: "luxoria-99c72",
+  storageBucket: "luxoria-99c72.firebasestorage.app",
+  messagingSenderId: "620801847493",
+  appId: "1:620801847493:web:87eabd3c844c7418afc0ac"
+};
 var db = null;
 try{ if(FIREBASE_CONFIG){ firebase.initializeApp(FIREBASE_CONFIG); db = firebase.firestore(); } }catch(e){ console.error(e); }
 
