@@ -4,28 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Luxora Circle</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com"><link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#000;--bone:#f2efe8;--mute:#a39e92;--gold:#c9a24a;--line:#2a2721;--panel:#0d0c0a}
+:root{--bg:#4B2D2B;--bone:#FFF8F0;--mute:#dcc8b8;--gold:#C18553;--line:#7a5249;--panel:#3d2422;--field:#38201e;--deep:#8C5B3D;--ok:#9ccfa5;--wait:#e6bf6a;--no:#f0a08a}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--bone);font:400 16px/1.65 Manrope,sans-serif}
-h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.1}
+body{background:var(--bg);color:var(--bone);font:400 16px/1.65 General Sans,sans-serif}
+h1,h2,h3{font-family:'General Sans',sans-serif;font-weight:600;line-height:1.1;letter-spacing:-.02em}
 a{color:inherit}
 .wrap{max-width:680px;margin:0 auto;padding:0 22px}
 .hero{position:relative;text-align:center;padding:72px 0 96px;overflow:hidden}
 .hero::before{content:"";position:absolute;left:50%;top:-40px;width:900px;height:900px;transform:translateX(-50%);
-background:repeating-conic-gradient(from 0deg at 50% 38%,rgba(201,162,74,.22) 0 2deg,transparent 2deg 9deg);
+background:repeating-conic-gradient(from 0deg at 50% 38%,rgba(193,133,83,.26) 0 2deg,transparent 2deg 9deg);
 -webkit-mask:radial-gradient(circle at 50% 38%,#000 0,transparent 62%);mask:radial-gradient(circle at 50% 38%,#000 0,transparent 62%);
 animation:rise 2.4s ease-out both}
 @keyframes rise{from{opacity:0;transform:translateX(-50%) scale(.6)}to{opacity:1;transform:translateX(-50%) scale(1)}}
 .hero>*{position:relative}
-.logo{width:min(300px,70vw);filter:invert(1);mix-blend-mode:screen;display:block;margin:0 auto 56px}
+.logo{width:min(300px,70vw);display:block;margin:0 auto 56px}
 .hero h1{font-size:clamp(38px,9vw,64px);max-width:12em;margin:0 auto 22px}
 .hero p{color:var(--mute);max-width:30em;margin:0 auto 34px}
-.btn{display:inline-block;background:var(--gold);color:#000;font:700 15px Manrope,sans-serif;border:0;border-radius:2px;padding:15px 30px;cursor:pointer;text-decoration:none}
-.btn:hover{background:#dab85f}
+.btn{display:inline-block;background:var(--gold);color:#2a1614;font:700 15px General Sans,sans-serif;border:0;border-radius:2px;padding:15px 30px;cursor:pointer;text-decoration:none}
+.btn:hover{background:#d39a68}
 .btn.ghost{background:none;color:var(--bone);border:1px solid var(--line)}
 .btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 section{padding:64px 0;border-top:1px solid var(--line)}
@@ -45,10 +44,10 @@ section p{color:var(--mute);margin-bottom:14px}
 .step{display:none}.step.on{display:block}
 label.q,.q{display:block;font-weight:500;margin:22px 0 8px}
 .hint{color:var(--mute);font-size:13px;font-weight:400;display:block}
-input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;background:#000;color:var(--bone);border:1px solid var(--line);border-radius:2px;padding:13px 14px;font:inherit}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;background:var(--field);color:var(--bone);border:1px solid var(--line);border-radius:2px;padding:13px 14px;font:inherit}
 textarea{min-height:150px;resize:vertical}
 .opts{display:grid;gap:8px}
-.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);background:#000;cursor:pointer;color:var(--bone);font-size:15px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);background:var(--field);cursor:pointer;color:var(--bone);font-size:15px}
 .opt input{accent-color:var(--gold);margin-top:5px}
 .opt:has(input:checked){border-color:var(--gold)}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
@@ -70,7 +69,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 </head>
 <body>
 <header class="hero"><div class="wrap">
-<img class="logo" src="logo.jpg" alt="Luxora">
+<img class="logo" src="logo.png" alt="Luxora">
 <h1>Awaken to who you are. Become who you choose to be.</h1>
 <p>Luxora Circle is a members-only community for people who are intentionally becoming. We show up weekly, we do the work, and we grow together.</p>
 <a class="btn" href="#apply">Apply to join</a>
@@ -212,13 +211,13 @@ try{ if(FIREBASE_CONFIG){ firebase.initializeApp(FIREBASE_CONFIG); db = firebase
 
 var steps=[].slice.call(document.querySelectorAll('.step')), cur=0;
 var f=document.getElementById('f'), err=document.getElementById('err'), nextB=document.getElementById('next'), backB=document.getElementById('back');
-function show(i){
+function show(i,quiet){
   cur=i; steps.forEach(function(s,k){s.classList.toggle('on',k===i)});
   document.getElementById('fill').style.width=((i+1)/steps.length*100)+'%';
   document.getElementById('sname').textContent='Step '+(i+1)+' of '+steps.length+': '+steps[i].dataset.name;
   backB.style.visibility=i?'visible':'hidden';
   nextB.textContent=i===steps.length-1?'Submit application':'Continue';
-  err.textContent=''; document.getElementById('apply').scrollIntoView();
+  err.textContent=''; if(!quiet)document.getElementById('apply').scrollIntoView();
 }
 function valid(i){
   var s=steps[i];
@@ -265,7 +264,7 @@ function submit(){
     err.textContent='Your application did not send. Check your connection and submit again.';
   });
 }
-show(0);
+show(0,true);
 </script>
 </body>
 </html>

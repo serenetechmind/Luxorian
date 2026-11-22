@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Luxora Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com"><link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#000;--bone:#f2efe8;--mute:#a39e92;--gold:#c9a24a;--line:#2a2721;--panel:#0d0c0a;--ok:#6fbf8b;--wait:#d9a94a;--no:#e5836b}
+:root{--bg:#4B2D2B;--bone:#FFF8F0;--mute:#dcc8b8;--gold:#C18553;--line:#7a5249;--panel:#3d2422;--field:#38201e;--deep:#8C5B3D;--ok:#9ccfa5;--wait:#e6bf6a;--no:#f0a08a}
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--bone);font:400 15px/1.6 Manrope,sans-serif}
-h1,h2{font-family:'Cormorant Garamond',serif;font-weight:600}
+body{background:var(--bg);color:var(--bone);font:400 15px/1.6 General Sans,sans-serif}
+h1,h2{font-family:'General Sans',sans-serif;font-weight:600;letter-spacing:-.02em}
 .wrap{max-width:900px;margin:0 auto;padding:0 18px}
 button,input,select,textarea{font:inherit;color:var(--bone)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.btn{background:var(--gold);color:#000;border:0;border-radius:2px;padding:10px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:14px}
+.btn{background:var(--gold);color:#2a1614;border:0;border-radius:2px;padding:10px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:14px}
 .btn.ghost{background:none;color:var(--bone);border:1px solid var(--line)}
 .btn.ok{background:var(--ok)}.btn.wait{background:var(--wait)}.btn.no{background:var(--no)}
-input,select,textarea{background:#000;border:1px solid var(--line);border-radius:2px;padding:10px 12px;width:100%}
+input,select,textarea{background:var(--field);border:1px solid var(--line);border-radius:2px;padding:10px 12px;width:100%}
 #login{max-width:380px;margin:18vh auto;padding:0 18px}
 #login h1{font-size:40px;margin-bottom:6px}
 #login input{margin:10px 0}
@@ -47,7 +47,7 @@ input,select,textarea{background:#000;border:1px solid var(--line);border-radius
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
 .note{margin-top:12px;min-height:60px}
 .empty{text-align:center;color:var(--mute);padding:60px 0}
-#msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;padding:10px 18px;font-weight:700;display:none}
+#msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2a1614;padding:10px 18px;font-weight:700;display:none}
 .demo{background:var(--panel);border:1px solid var(--gold);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
 </style>
 </head>
