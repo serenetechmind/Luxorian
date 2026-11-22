@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#4B2D2B">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Luxora Circle</title>
 <link rel="preconnect" href="https://api.fontshare.com"><link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 <style>
@@ -37,7 +41,6 @@ section p{color:var(--mute);margin-bottom:14px}
 .vals{display:grid;gap:14px;margin-top:20px}
 .vals div{padding:16px 18px;background:var(--panel);border:1px solid var(--line)}
 .vals b{display:block;margin-bottom:2px}
-#apply{background:var(--panel)}
 .bar{height:3px;background:var(--line);margin:26px 0 8px}
 .bar i{display:block;height:100%;width:33%;background:var(--gold);transition:width .35s}
 .stepname{color:var(--mute);font-size:14px;margin-bottom:22px}
@@ -64,6 +67,47 @@ details{border-top:1px solid var(--line);padding:16px 0}
 summary{cursor:pointer;font-weight:500}
 details p{margin:10px 0 0}
 footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+
+/* ---- form redesign ---- */
+#apply{background:linear-gradient(165deg,#4B2D2B 0%,#6a4030 55%,#8C5B3D 100%);padding:72px 0 88px}
+.fc{background:#FFF8F0;color:#4B2D2B;border-radius:28px;padding:34px 24px 28px;box-shadow:0 30px 70px rgba(20,8,6,.45);position:relative;overflow:hidden}
+.fc::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,#8C5B3D,#C18553,#8C5B3D)}
+@media(min-width:600px){.fc{padding:46px 48px 38px}}
+.fc .fh{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.fc .fh img{width:46px;height:46px;border-radius:12px}
+.fc h2{color:#4B2D2B;margin:0;font-size:clamp(26px,5vw,34px)}
+.fc p{color:#8C5B3D;margin:0}
+.fc .bar{height:8px;background:#eadbcb;border-radius:8px;margin:26px 0 12px;overflow:hidden}
+.fc .bar i{border-radius:8px;background:linear-gradient(90deg,#C18553,#8C5B3D)}
+.fc .stepname{color:#8C5B3D;font-size:14px;margin:0}
+#stitle{font:600 clamp(26px,6vw,34px)/1.15 'General Sans',sans-serif;letter-spacing:-.02em;margin:6px 0 4px;color:#4B2D2B}
+.fc .q{color:#4B2D2B;font-weight:600;margin:26px 0 10px;font-size:16px}
+.fc .hint{color:#8C5B3D;font-weight:400}
+.fc input[type=text],.fc input[type=email],.fc input[type=tel],.fc select,.fc textarea{background:#fff;color:#4B2D2B;border:1.5px solid #e6d5c4;border-radius:14px;padding:15px 16px;transition:border-color .15s,box-shadow .15s}
+.fc ::placeholder{color:#b49a88}
+.fc input:focus,.fc select:focus,.fc textarea:focus{outline:0;border-color:#C18553;box-shadow:0 0 0 4px rgba(193,133,83,.22)}
+.fc select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%238C5B3D' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px}
+.fc .opts{gap:10px}
+@media(min-width:560px){.fc .opts.two{grid-template-columns:1fr 1fr}}
+.fc .opt{position:relative;background:#fff;color:#4B2D2B;border:1.5px solid #e6d5c4;border-radius:14px;padding:14px 16px;transition:all .15s}
+.fc .opt:hover{border-color:#C18553}
+.fc .opt input{position:absolute;opacity:0;pointer-events:none}
+.fc .opt:has(input:checked){background:#4B2D2B;color:#FFF8F0;border-color:#4B2D2B;box-shadow:0 6px 16px rgba(75,45,43,.28)}
+.fc .opt:has(input:focus-visible){outline:2px solid #C18553;outline-offset:2px}
+.fc .scale{gap:10px}
+.fc .scale .opt{padding:16px 0;font:600 20px 'General Sans',sans-serif;border-radius:16px}
+.fc .row{gap:0 18px}
+.fc .count{color:#8C5B3D;margin-top:6px}
+.fc .note{color:#8C5B3D}
+.fc .err{color:#b3402a;font-weight:500}
+.fc .nav{margin-top:38px}
+.fc .btn{background:#4B2D2B;color:#FFF8F0;border-radius:14px;padding:16px 30px;font-size:15px}
+.fc .btn:hover{background:#8C5B3D}
+.fc .btn.ghost{background:none;color:#8C5B3D;border:1.5px solid #e6d5c4}
+.fc .btn:disabled{opacity:.6}
+.fc .done h3{color:#4B2D2B;font-size:34px;margin:14px 0 10px}
+.fc .done p{max-width:26em;margin:0 auto}
+.fc .done::before{content:"✓";display:grid;place-items:center;width:64px;height:64px;margin:0 auto;border-radius:50%;background:#C18553;color:#FFF8F0;font-size:30px}
 @media(prefers-reduced-motion:reduce){.hero::before{animation:none}html{scroll-behavior:auto}.bar i{transition:none}}
 </style>
 </head>
@@ -93,14 +137,14 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 </div>
 </div></section>
 
-<section id="apply"><div class="wrap">
-<h2>Member entry form</h2>
-<p>Answer honestly. Short answers get passed over.</p>
+<section id="apply"><div class="wrap"><div class="fc">
+<div class="fh"><img src="favicon-192.png" alt=""><div><h2>Member entry form</h2><p>Answer honestly. Short answers get passed over.</p></div></div>
 <div class="bar"><i id="fill"></i></div>
-<div class="stepname" id="sname">Step 1 of 3: About you</div>
+<div class="stepname" id="sname">Step 1 of 3</div>
+<div id="stitle"></div>
 
 <form id="f" novalidate>
-<div class="step on" data-name="About you">
+<div class="step on" data-name="About you" data-title="First, who are you?">
 <div class="row">
 <div><label class="q" for="name">Full name</label><input type="text" id="name" name="name" autocomplete="name" required></div>
 <div><label class="q" for="email">Email address</label><input type="email" id="email" name="email" autocomplete="email" required></div>
@@ -122,7 +166,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <label class="q" for="status">Current status</label>
 <select id="status" name="status" required><option value="">Select</option><option>Secondary School Student</option><option>Undergraduate Student</option><option>Graduate</option><option>Employed / Working Professional</option><option>Entrepreneur / Freelancer</option><option>Other</option></select>
 <span class="q">When are you most active on WhatsApp?</span>
-<div class="opts" data-req="active">
+<div class="opts two" data-req="active">
 <label class="opt"><input type="radio" name="active" value="Morning"> Morning (8:00 AM – 10:00 AM)</label>
 <label class="opt"><input type="radio" name="active" value="Afternoon"> Afternoon (1:00 PM – 3:00 PM)</label>
 <label class="opt"><input type="radio" name="active" value="Evening"> Evening (7:00 PM – 10:00 PM)</label>
@@ -130,7 +174,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 </div>
 </div>
 
-<div class="step" data-name="Intent and alignment">
+<div class="step" data-name="Intent and alignment" data-title="What brings you to Luxora?">
 <label class="q" for="goal">What is your biggest goal in this season of your life?</label>
 <input type="text" id="goal" name="goal" required>
 <label class="q" for="why">Why do you want to join the Luxora Circle right now?<span class="hint">Take your time. Write at least 150 characters.</span></label>
@@ -138,7 +182,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <label class="q" for="block">What has stopped you from growing so far?</label>
 <textarea id="block" name="blocker" style="min-height:100px" required></textarea>
 <span class="q">Where do you need the most growth and support? <span class="hint">Choose 2</span></span>
-<div class="opts" id="areas" data-req="areas">
+<div class="opts two" id="areas" data-req="areas">
 <label class="opt"><input type="checkbox" name="areas" value="Identity, mindset and unlearning old habits"> Personal identity, mindset and unlearning old habits</label>
 <label class="opt"><input type="checkbox" name="areas" value="Career clarity and skill positioning"> Career clarity and skill positioning</label>
 <label class="opt"><input type="checkbox" name="areas" value="Consistency, discipline and daily systems"> Consistency, discipline and daily systems</label>
@@ -151,7 +195,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <input type="text" id="outcome" name="outcome" required>
 </div>
 
-<div class="step" data-name="Commitment">
+<div class="step" data-title="Are you ready to show up?" data-name="Commitment">
 <span class="q">Luxora is built on participation and execution. How ready are you to show up, contribute and engage weekly?<span class="hint">1 is not ready, 5 is fully ready</span></span>
 <div class="scale" data-req="ready">
 <label class="opt"><input type="radio" name="ready" value="1">1</label><label class="opt"><input type="radio" name="ready" value="2">2</label><label class="opt"><input type="radio" name="ready" value="3">3</label><label class="opt"><input type="radio" name="ready" value="4">4</label><label class="opt"><input type="radio" name="ready" value="5">5</label>
@@ -161,7 +205,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <label class="q" for="contrib">What can you contribute to the Circle?<span class="hint">A skill, a gift, a perspective, a habit you can model</span></label>
 <textarea id="contrib" name="contribute" style="min-height:100px" required></textarea>
 <span class="q">Have you been part of a community like this before?</span>
-<div class="opts" data-req="before">
+<div class="opts two" data-req="before">
 <label class="opt"><input type="radio" name="before" value="Yes"> Yes</label>
 <label class="opt"><input type="radio" name="before" value="No"> No</label></div>
 <div class="row">
@@ -183,7 +227,7 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <h3>Application received</h3>
 <p>Thank you for applying. We review every application personally, and if you are approved we will message you on WhatsApp. Keep your phone close.</p>
 </div>
-</div></section>
+</div></div></section>
 
 <section><div class="wrap">
 <h2>Questions</h2>
@@ -214,7 +258,7 @@ var f=document.getElementById('f'), err=document.getElementById('err'), nextB=do
 function show(i,quiet){
   cur=i; steps.forEach(function(s,k){s.classList.toggle('on',k===i)});
   document.getElementById('fill').style.width=((i+1)/steps.length*100)+'%';
-  document.getElementById('sname').textContent='Step '+(i+1)+' of '+steps.length+': '+steps[i].dataset.name;
+  document.getElementById('sname').textContent='Step '+(i+1)+' of '+steps.length+' · '+steps[i].dataset.name;document.getElementById('stitle').textContent=steps[i].dataset.title;
   backB.style.visibility=i?'visible':'hidden';
   nextB.textContent=i===steps.length-1?'Submit application':'Continue';
   err.textContent=''; if(!quiet)document.getElementById('apply').scrollIntoView();
@@ -257,7 +301,7 @@ function submit(){
   nextB.disabled=true; nextB.textContent='Submitting…';
   var p=db?db.collection('luxora_applications').add(d):Promise.resolve(console.log('Demo mode, add FIREBASE_CONFIG to save:',d));
   p.then(function(){
-    f.style.display='none'; document.querySelector('.bar').style.display='none'; document.getElementById('sname').style.display='none';
+    f.style.display='none'; document.querySelector('.bar').style.display='none'; document.getElementById('sname').style.display='none';document.getElementById('stitle').style.display='none';document.querySelector('.fh').style.display='none';
     document.getElementById('done').style.display='block';
   }).catch(function(e){
     console.error(e); nextB.disabled=false; nextB.textContent='Submit application';
