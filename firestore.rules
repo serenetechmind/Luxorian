@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function isAdmin() {
+      return signedIn() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.token.email.lower()));
+    }
+    function isOwner() {
+      return isAdmin() &&
+        get(/databases/$(database)/documents/admins/$(request.auth.token.email.lower())).data.role == 'owner';
+    }
+
+    // Applicants can submit; only admins can read or change applications.
+    match /luxora_applications/{id} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Admin allowlist. Document ID is the admin's lowercase email.
+    match /admins/{adminId} {
+      allow get: if signedIn() && request.auth.token.email.lower() == adminId;
+      allow list: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.role == 'admin'
+        && request.resource.data.email == adminId
+        && adminId == adminId.lower();
+      allow update: if false;
+      allow delete: if isOwner() && resource.data.role != 'owner';
+    }
+  }
+}

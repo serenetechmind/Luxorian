@@ -52,6 +52,9 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 .note{margin-top:12px;min-height:60px}
 .empty{text-align:center;color:var(--mute);padding:60px 0}
 #msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2a1614;padding:10px 18px;font-weight:700;display:none}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.addrow{display:flex;gap:8px;margin-top:14px}
+.addrow input{flex:1}
 .demo{background:var(--panel);border:1px solid var(--gold);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
 </style>
 </head>
@@ -59,15 +62,21 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 
 <div id="login">
 <h1>Luxora admin</h1>
-<p class="meta">Sign in to review applications.</p>
+<p class="meta">Enter your admin email and we will send you a sign-in link.</p>
 <input type="email" id="em" placeholder="Admin email" autocomplete="username">
-<input type="password" id="pw" placeholder="Password" autocomplete="current-password">
-<button class="btn" id="go" style="width:100%">Sign in</button>
-<p class="meta" id="lerr" style="color:var(--no);margin-top:10px"></p>
+<button class="btn" id="go" style="width:100%">Email me a sign-in link</button>
+<p class="meta" id="lerr" style="margin-top:12px" role="alert"></p>
 </div>
 
 <div id="app" style="display:none"><div class="wrap">
-<div class="top"><h1>Applications</h1><div class="tools"><button class="btn ghost" id="csv">Export CSV</button><button class="btn ghost" id="out">Sign out</button></div></div>
+<div class="top"><h1>Applications</h1><div class="tools"><button class="btn ghost" id="adm">Admins</button><button class="btn ghost" id="csv">Export CSV</button><button class="btn ghost" id="out">Sign out</button></div></div>
+<div class="card" id="apanel" style="display:none">
+<b style="font-size:17px">Admins</b>
+<div class="meta">Anyone listed here can review applications. Added admins sign in with an email link sent to the address you add.</div>
+<div id="alist" style="margin-top:12px"></div>
+<div class="addrow"><input type="email" id="aem" placeholder="New admin email"><button class="btn" id="aadd">Add admin</button></div>
+<div class="meta" id="ainfo" style="margin-top:10px" role="status"></div>
+</div>
 <div class="demo" id="demo">Demo mode: showing sample data. Add FIREBASE_CONFIG to use real applications.</div>
 <div class="tabs" id="tabs"></div>
 <div class="filters">
@@ -114,12 +123,62 @@ function start(){
     apps=s.docs.map(function(d){var x=d.data();x.id=d.id;return x});render();
   },function(e){console.error(e);toast('Could not load applications')});
 }
-if(auth){auth.onAuthStateChanged(function(u){if(u)start();else{$('login').style.display='block';$('app').style.display='none'}})}
+var me=null,admins=[],adminsOn=false;
+function showLogin(msg){$('login').style.display='block';$('app').style.display='none';$('lerr').style.color='var(--no)';$('lerr').textContent=msg||''}
+function denyAccess(){auth.signOut();showLogin("This email does not have admin access. Ask an existing admin to add you.")}
+var LINK_URL=location.origin+location.pathname;
+if(auth){
+  if(auth.isSignInWithEmailLink(location.href)){
+    var le=localStorage.getItem('luxAdminEmail')||window.prompt('Confirm your email to finish signing in');
+    if(le)auth.signInWithEmailLink(le.trim(),location.href).then(function(){localStorage.removeItem('luxAdminEmail')}).catch(function(){showLogin('That sign-in link has expired or was already used. Request a new one.')});
+    history.replaceState(null,'',location.pathname);
+  }
+  auth.onAuthStateChanged(function(u){
+    if(!u){showLogin();return}
+    var id=(u.email||'').toLowerCase();
+    db.collection('admins').doc(id).get().then(function(d){
+      if(!d.exists)return denyAccess();
+      me=d.data();me.email=id;start();
+    }).catch(function(){denyAccess()});
+  });
+}
 $('go').onclick=function(){
-  if(!auth){start();return}
-  auth.signInWithEmailAndPassword($('em').value.trim(),$('pw').value).catch(function(){$('lerr').textContent='Email or password is incorrect.'});
+  var e=$('em').value.trim().toLowerCase();
+  if(!/^\S+@\S+\.\S+$/.test(e)){$('lerr').textContent='Enter a valid email address.';return}
+  $('go').disabled=true;
+  auth.sendSignInLinkToEmail(e,{url:LINK_URL,handleCodeInApp:true}).then(function(){
+    localStorage.setItem('luxAdminEmail',e);
+    $('lerr').style.color='var(--ok)';$('lerr').textContent='Link sent. Open it on this device to sign in. Check spam if you do not see it.';
+  }).catch(function(){$('lerr').style.color='var(--no)';$('lerr').textContent='Could not send the link. Check the email and try again.'}).then(function(){$('go').disabled=false});
 };
 $('out').onclick=function(){auth?auth.signOut():location.reload()};
+
+// ---- admins management ----
+function loadAdmins(){
+  if(adminsOn||!db)return;adminsOn=true;
+  db.collection('admins').orderBy('addedAt').onSnapshot(function(s){admins=s.docs.map(function(d){return d.data()});renderAdmins()},function(){toast('Could not load admins')});
+}
+function renderAdmins(){
+  $('alist').innerHTML=admins.map(function(a){
+    var canRm=me&&me.role==='owner'&&a.role!=='owner';
+    return '<div class="arow"><div><b>'+esc(a.email)+'</b><div class="meta">'+(a.role==='owner'?'Owner':'Admin')+(a.addedBy?' · added by '+esc(a.addedBy):'')+'</div></div>'+(canRm?'<button class="btn ghost" data-rm="'+esc(a.email)+'">Remove</button>':'')+'</div>';
+  }).join('');
+}
+$('adm').onclick=function(){var p=$('apanel');p.style.display=p.style.display==='none'?'block':'none';if(p.style.display==='block')loadAdmins()};
+$('aadd').onclick=function(){
+  var e=$('aem').value.trim().toLowerCase(),info=$('ainfo');
+  if(!/^\S+@\S+\.\S+$/.test(e)){info.textContent='Enter a valid email address.';return}
+  if(admins.some(function(a){return a.email===e})){info.textContent='That email is already an admin.';return}
+  db.collection('admins').doc(e).set({email:e,role:'admin',addedBy:me.email,addedAt:new Date().toISOString()}).then(function(){
+    $('aem').value='';
+    var body='You have been added as an admin on the Luxora Circle dashboard.\n\nOpen '+LINK_URL+' , enter this email address and choose "Email me a sign-in link".';
+    info.innerHTML='Added '+esc(e)+'. <a style="color:var(--gold)" href="mailto:'+encodeURIComponent(e)+'?subject='+encodeURIComponent('Luxora admin access')+'&body='+encodeURIComponent(body)+'">Send them an invite email</a>';
+  }).catch(function(){info.textContent='Could not add that admin. Check your connection and permissions.'});
+};
+document.addEventListener('click',function(e){
+  var em=e.target.dataset&&e.target.dataset.rm;if(!em)return;
+  if(confirm('Remove '+em+' as an admin? They will lose access immediately.'))db.collection('admins').doc(em).delete().then(function(){toast('Admin removed')}).catch(function(){toast('Could not remove admin')});
+});
 
 function st(a){return a.status_review||'pending'}
 function render(){
@@ -188,7 +247,6 @@ $('csv').onclick=function(){
   var csv=[cols.join(',')].concat(apps.map(function(a){return cols.map(function(k){return c(a[k])}).join(',')})).join('\n');
   var l=document.createElement('a');l.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));l.download='luxora-applications.csv';l.click();
 };
-if(!auth)start();
 </script>
 </body>
 </html>
