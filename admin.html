@@ -11,72 +11,103 @@
 <title>Luxora Admin</title>
 <link rel="preconnect" href="https://api.fontshare.com"><link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#4B2D2B;--bone:#FFF8F0;--mute:#dcc8b8;--gold:#C18553;--line:#7a5249;--panel:#3d2422;--field:#38201e;--deep:#8C5B3D;--ok:#9ccfa5;--wait:#e6bf6a;--no:#f0a08a}
+:root{--ink:#4B2D2B;--cream:#FFF8F0;--bg:#F4E9DD;--card:#fff;--line:#eadbcb;--mute:#8C5B3D;--gold:#C18553;--ok:#2f7a4f;--no:#b3402a}
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--bone);font:400 15px/1.6 General Sans,sans-serif}
-h1,h2{font-family:'General Sans',sans-serif;font-weight:600;letter-spacing:-.02em}
-.wrap{max-width:900px;margin:0 auto;padding:0 18px}
-button,input,select,textarea{font:inherit;color:var(--bone)}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.6 'General Sans',sans-serif}
+h1,h2{font-weight:600;letter-spacing:-.02em}
+button,input,select,textarea{font:inherit;color:var(--ink)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.btn{background:var(--gold);color:#2a1614;border:0;border-radius:2px;padding:10px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:14px}
-.btn.ghost{background:none;color:var(--bone);border:1px solid var(--line)}
-.btn.ok{background:var(--ok)}.btn.wait{background:var(--wait)}.btn.no{background:var(--no)}
-input,select,textarea{background:var(--field);border:1px solid var(--line);border-radius:2px;padding:10px 12px;width:100%}
-#login{max-width:380px;margin:18vh auto;padding:0 18px}
-#login h1{font-size:40px;margin-bottom:6px}
-#login input{margin:10px 0}
-.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:12px;flex-wrap:wrap}
-.top h1{font-size:34px}
+.btn{background:var(--ink);color:var(--cream);border:0;border-radius:12px;padding:11px 18px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;font-size:14px;transition:background .15s}
+.btn:hover{background:#6a4030}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid #e0cdbb}
+.btn.ghost:hover{background:#fff}
+.btn.ok{background:var(--ok);color:#fff}.btn.wait{background:#d9a441;color:#3a2200}.btn.no{background:#fff;color:var(--no);border:1.5px solid #e7b8ab}
+.btn:disabled{opacity:.6}
+input,select,textarea{background:#fff;border:1.5px solid #e6d5c4;border-radius:12px;padding:11px 14px;width:100%;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 4px rgba(193,133,83,.2)}
+::placeholder{color:#b49a88}
+#login{min-height:100vh;background:linear-gradient(165deg,#4B2D2B,#6a4030 55%,#8C5B3D);padding:10vh 18px}
+.lcard{max-width:410px;margin:0 auto;background:var(--cream);border-radius:26px;padding:38px 30px;box-shadow:0 30px 70px rgba(20,8,6,.45)}
+.lcard img{width:54px;height:54px;border-radius:14px;margin-bottom:18px}
+.lcard h1{font-size:32px;margin-bottom:6px}
+.lcard input{margin:16px 0 12px}
+.shell{min-height:100vh}
+.side{background:var(--ink);color:var(--cream);position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;padding:6px 8px;box-shadow:0 -8px 24px rgba(40,18,14,.25)}
+.side .brand{display:none}
+.side nav{display:flex;flex:1;justify-content:space-around;gap:2px}
+.side .tab{flex:1;background:none;border:0;border-radius:12px;padding:10px 4px;font-size:12.5px;font-weight:500;color:#dcc8b8;cursor:pointer;text-align:center}
+.side .tab.on{background:rgba(255,248,240,.14);color:var(--cream)}
+.main{padding:22px 18px 100px;max-width:980px;margin:0 auto}
+@media(min-width:900px){
+ .shell{display:grid;grid-template-columns:250px 1fr}
+ .side{position:sticky;top:0;height:100vh;flex-direction:column;gap:30px;padding:30px 18px;box-shadow:none}
+ .side .brand{display:block}.side .brand img{width:150px}
+ .side nav{flex-direction:column;justify-content:flex-start;gap:4px;flex:none}
+ .side .tab{text-align:left;font-size:15px;padding:12px 16px;flex:none}
+ .main{padding:34px 40px 60px;width:100%}
+}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:clamp(28px,5vw,38px)}
 .tools{display:flex;gap:8px;flex-wrap:wrap}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
-.tab{background:none;border:1px solid var(--line);padding:8px 14px;border-radius:2px;cursor:pointer;white-space:nowrap;color:var(--mute)}
-.tab.on{border-color:var(--gold);color:var(--bone)}
-.tab b{color:var(--gold);margin-left:4px}
-.filters{display:grid;gap:8px;margin:16px 0;grid-template-columns:1fr}
-@media(min-width:640px){.filters{grid-template-columns:2fr 1fr 1fr}}
-.card{background:var(--panel);border:1px solid var(--line);margin-bottom:14px;padding:18px}
-.card.approved{border-left:3px solid var(--ok)}.card.waitlisted{border-left:3px solid var(--wait)}.card.declined{border-left:3px solid var(--no)}
-.h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px}
+@media(min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.stat b{display:block;font-size:30px;line-height:1.1;letter-spacing:-.02em}
+.stat span{color:var(--mute);font-size:13px}
+.stat.hot{background:var(--ink);color:var(--cream);border-color:var(--ink)}.stat.hot span{color:#e6cfba}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.main .tab{background:#fff;border:1.5px solid #e6d5c4;padding:8px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;color:var(--mute);font-weight:500}
+.main .tab.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.main .tab b{margin-left:6px;opacity:.75}
+.filters{display:grid;gap:10px;margin:16px 0 20px;grid-template-columns:1fr}
+@media(min-width:700px){.filters{grid-template-columns:2fr 1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;margin-bottom:16px;padding:22px;box-shadow:0 2px 0 rgba(75,45,43,.03)}
+.h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.who{display:flex;gap:12px;align-items:center}
+.av{width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
 .h b{font-size:17px}
 .meta{color:var(--mute);font-size:13px}
-.pill{font-size:12px;border:1px solid var(--line);padding:2px 10px;border-radius:20px;color:var(--mute)}
-.why{margin:12px 0;white-space:pre-wrap}
-.lbl{color:var(--mute);font-size:13px;margin-top:10px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.chips span{border:1px solid var(--line);padding:2px 10px;font-size:13px}
-.more{display:none;margin-top:6px;border-top:1px solid var(--line);padding-top:8px}
-.more.on{display:block}
-.stars button{background:none;border:0;font-size:20px;cursor:pointer;color:var(--line);padding:0 2px}
-.stars button.on{color:var(--gold)}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
-.note{margin-top:12px;min-height:60px}
-.empty{text-align:center;color:var(--mute);padding:60px 0}
-#msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2a1614;padding:10px 18px;font-weight:700;display:none}
-.arow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
-.addrow{display:flex;gap:8px;margin-top:14px}
-.addrow input{flex:1}
-.qr{border:1px solid var(--line);margin-top:10px;padding:12px;background:var(--field)}
-.fld{display:grid;gap:5px;margin-top:10px}
-.fld label{font-size:13px;color:var(--mute)}
-.chk{display:flex;gap:10px;align-items:center;margin-top:12px;cursor:pointer}
-.chk input{width:auto}
-.iconb{padding:7px 11px}
-.demo{background:var(--panel);border:1px solid var(--gold);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
+.pill{font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px;background:#f5e6d3;color:var(--mute)}
+.card.approved .pill{background:#e3f2e8;color:var(--ok)}.card.waitlisted .pill{background:#fbefd2;color:#8a5a00}.card.declined .pill{background:#f8e1db;color:var(--no)}
+.why{margin:16px 0 4px;white-space:pre-wrap;background:var(--cream);border-left:3px solid var(--gold);border-radius:4px 14px 14px 4px;padding:14px 16px}
+.lbl{color:var(--mute);font-size:12.5px;margin-top:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.chips span{background:#f5e6d3;color:var(--ink);border-radius:999px;padding:3px 12px;font-size:13px}
+.more{display:none;margin-top:8px;border-top:1px solid var(--line);padding-top:6px}.more.on{display:block}
+.stars{margin-top:14px}
+.stars button{background:none;border:0;font-size:22px;cursor:pointer;color:#e6d5c4;padding:0 2px}.stars button.on{color:var(--gold)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.note{margin-top:14px;min-height:64px}
+.empty{text-align:center;color:var(--mute);padding:70px 0;background:var(--card);border:1px dashed #e0cdbb;border-radius:22px}
+#msg{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:12px 20px;border-radius:14px;font-weight:600;display:none;z-index:40;box-shadow:0 10px 30px rgba(40,18,14,.3)}
+@media(min-width:900px){#msg{bottom:28px}}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.addrow{display:flex;gap:8px;margin-top:14px}.addrow input{flex:1}
+.qr{border:1px solid var(--line);margin-top:12px;padding:14px;background:var(--cream);border-radius:16px}
+.fld{display:grid;gap:5px;margin-top:12px}.fld label{font-size:13px;color:var(--mute);font-weight:500}
+.chk{display:flex;gap:10px;align-items:center;margin-top:12px;cursor:pointer}.chk input{width:auto;accent-color:var(--ink)}
+.iconb{padding:8px 12px}
+.demo{background:#fbefd2;border:1px solid #e9c27a;border-radius:14px;padding:10px 14px;font-size:13px;margin-bottom:16px;display:none}
 </style>
 </head>
 <body>
 
-<div id="login">
+<div id="login"><div class="lcard">
+<img src="favicon-192.png" alt="">
 <h1>Luxora admin</h1>
 <p class="meta">Enter your admin email and we will send you a sign-in link.</p>
 <input type="email" id="em" placeholder="Admin email" autocomplete="username">
 <button class="btn" id="go" style="width:100%">Email me a sign-in link</button>
 <p class="meta" id="lerr" style="margin-top:12px" role="alert"></p>
-</div>
+</div></div>
 
-<div id="app" style="display:none"><div class="wrap">
-<div class="top"><h1>Applications</h1><div class="tools"><button class="btn ghost" id="adm">Admins</button><button class="btn ghost" id="csv">Export CSV</button><button class="btn ghost" id="out">Sign out</button></div></div>
-<div class="tabs" id="views" style="margin-bottom:16px"><button class="tab on" data-v="vApps">Applications</button><button class="tab" data-v="vForm">Form</button><button class="tab" data-v="vSet">Settings</button></div>
+<div id="app" style="display:none"><div class="shell">
+<aside class="side">
+<div class="brand"><img src="logo.png" alt="Luxora"></div>
+<nav id="views"><button class="tab on" data-v="vApps">Applications</button><button class="tab" data-v="vForm">Form</button><button class="tab" data-v="vSet">Settings</button><button class="tab" id="adm">Admins</button></nav>
+</aside>
+<main class="main">
+<div class="top"><h1>Applications</h1><div class="tools"><button class="btn ghost" id="csv">Export CSV</button><button class="btn ghost" id="out">Sign out</button></div></div>
 <div class="card" id="apanel" style="display:none">
 <b style="font-size:17px">Admins</b>
 <div class="meta">Anyone listed here can review applications. Added admins sign in with an email link sent to the address you add.</div>
@@ -85,7 +116,7 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 <div class="meta" id="ainfo" style="margin-top:10px" role="status"></div>
 </div>
 <div class="demo" id="demo">Demo mode: showing sample data. Add FIREBASE_CONFIG to use real applications.</div>
-<div id="vApps"><div class="tabs" id="tabs"></div>
+<div id="vApps"><div class="stats" id="stats"></div><div class="tabs" id="tabs"></div>
 <div class="filters">
 <input type="search" id="q" placeholder="Search name, email, country, goal">
 <select id="fage"><option value="">All ages</option><option>13–17</option><option>18–24</option><option>25–30</option><option>31–40</option><option>41+</option></select>
@@ -94,7 +125,7 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 <div id="list"></div></div>
 <div id="vForm" style="display:none"><div id="fbody"></div></div>
 <div id="vSet" style="display:none"><div id="sbody"></div></div>
-</div></div>
+</main></div></div>
 <div id="msg"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
@@ -309,6 +340,7 @@ function st(a){return a.status_review||'pending'}
 function render(){
   var counts={all:apps.length};STATUSES.forEach(function(s){counts[s]=apps.filter(function(a){return st(a)===s}).length});
   $('tabs').innerHTML=STATUSES.map(function(s){return '<button class="tab'+(tab===s?' on':'')+'" data-t="'+s+'">'+LABEL[s]+'<b>'+counts[s]+'</b></button>'}).join('')+'<button class="tab'+(tab==='all'?' on':'')+'" data-t="all">All<b>'+counts.all+'</b></button>';
+  $('stats').innerHTML=[['Total',counts.all],['Pending',counts.pending,1],['Approved',counts.approved],['Waitlisted',counts.waitlisted]].map(function(x){return '<div class="stat'+(x[2]?' hot':'')+'"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>'}).join('');
   var areas={};apps.forEach(function(a){(a.areas||[]).forEach(function(x){areas[x]=1})});
   var sel=$('farea'),cv=sel.value;
   if(sel.options.length-1!==Object.keys(areas).length){sel.innerHTML='<option value="">All growth areas</option>'+Object.keys(areas).map(function(x){return '<option>'+esc(x)+'</option>'}).join('');sel.value=cv}
@@ -326,12 +358,12 @@ function card(a){
   for(var i=1;i<=5;i++)stars+='<button data-star="'+i+'" data-id="'+esc(a.id)+'" class="'+(i<=r?'on':'')+'" aria-label="Rate '+i+'">★</button>';
   var date=a.createdAt?new Date(a.createdAt).toLocaleDateString():'';
   function row(k,v){return v?'<div class="lbl">'+k+'</div><div>'+esc(v)+'</div>':''}
-  return '<div class="card '+s+'"><div class="h"><div><b>'+esc(a.name)+'</b><div class="meta">'+esc(a.age)+' · '+esc(a.gender)+' · '+esc(a.city)+', '+esc(a.country)+' · '+esc(date)+'</div></div><span class="pill">'+LABEL[s]+'</span></div>'
-  +'<div class="why">'+esc(a.why)+'</div>'
+  return '<div class="card '+s+'"><div class="h"><div class="who"><div class="av">'+esc((a.name||'?').split(' ').map(function(w){return w[0]||''}).slice(0,2).join('').toUpperCase())+'</div><div><b>'+esc(a.name)+'</b><div class="meta">'+esc(a.age)+' · '+esc(a.gender)+' · '+esc(a.city)+', '+esc(a.country)+' · '+esc(date)+'</div></div></div><span class="pill">'+LABEL[s]+'</span></div>'
+  +(a.why?'<div class="why">'+esc(a.why)+'</div>':'')
   +'<div class="chips">'+(a.areas||[]).map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</div>'
   +row('Goal',a.goal)+row('Outcome wanted',a.outcome)
   +'<div class="more" id="m-'+esc(a.id)+'">'+row('What has stopped them',a.blocker)+row('Can contribute',a.contribute)+row('Status',a.status)+row('Readiness (1–5)',a.ready)+row('Hours per week',a.hours)+row('Most active on WhatsApp',a.active)+row('Community before',a.before)+row('Heard via',a.heard+(a.referredBy?' (referred by '+a.referredBy+')':''))+row('Email',a.email)+row('WhatsApp',a.whatsapp)+extras(a,row)+'</div>'
-  +'<div class="stars" style="margin-top:10px">'+stars+'</div>'
+  +'<div class="stars">'+stars+'</div>'
   +'<textarea class="note" data-note="'+esc(a.id)+'" placeholder="Admin note (saves when you click away)">'+esc(a.adminNote||'')+'</textarea>'
   +'<div class="acts"><button class="btn ok" data-set="approved" data-id="'+esc(a.id)+'">Approve</button><button class="btn wait" data-set="waitlisted" data-id="'+esc(a.id)+'">Waitlist</button><button class="btn no" data-set="declined" data-id="'+esc(a.id)+'">Decline</button>'
   +(s!=='pending'?'<button class="btn ghost" data-set="pending" data-id="'+esc(a.id)+'">Reset</button>':'')
