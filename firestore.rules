@@ -20,6 +20,12 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
+    // Form questions and site settings: public to read (the form needs them), admin-only to change.
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Admin allowlist. Document ID is the admin's lowercase email.
     match /admins/{adminId} {
       allow get: if signedIn() && request.auth.token.email.lower() == adminId;

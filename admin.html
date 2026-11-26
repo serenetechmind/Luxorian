@@ -55,6 +55,12 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 .arow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .addrow{display:flex;gap:8px;margin-top:14px}
 .addrow input{flex:1}
+.qr{border:1px solid var(--line);margin-top:10px;padding:12px;background:var(--field)}
+.fld{display:grid;gap:5px;margin-top:10px}
+.fld label{font-size:13px;color:var(--mute)}
+.chk{display:flex;gap:10px;align-items:center;margin-top:12px;cursor:pointer}
+.chk input{width:auto}
+.iconb{padding:7px 11px}
 .demo{background:var(--panel);border:1px solid var(--gold);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
 </style>
 </head>
@@ -70,6 +76,7 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 
 <div id="app" style="display:none"><div class="wrap">
 <div class="top"><h1>Applications</h1><div class="tools"><button class="btn ghost" id="adm">Admins</button><button class="btn ghost" id="csv">Export CSV</button><button class="btn ghost" id="out">Sign out</button></div></div>
+<div class="tabs" id="views" style="margin-bottom:16px"><button class="tab on" data-v="vApps">Applications</button><button class="tab" data-v="vForm">Form</button><button class="tab" data-v="vSet">Settings</button></div>
 <div class="card" id="apanel" style="display:none">
 <b style="font-size:17px">Admins</b>
 <div class="meta">Anyone listed here can review applications. Added admins sign in with an email link sent to the address you add.</div>
@@ -78,13 +85,15 @@ input,select,textarea{background:var(--field);border:1px solid var(--line);borde
 <div class="meta" id="ainfo" style="margin-top:10px" role="status"></div>
 </div>
 <div class="demo" id="demo">Demo mode: showing sample data. Add FIREBASE_CONFIG to use real applications.</div>
-<div class="tabs" id="tabs"></div>
+<div id="vApps"><div class="tabs" id="tabs"></div>
 <div class="filters">
 <input type="search" id="q" placeholder="Search name, email, country, goal">
 <select id="fage"><option value="">All ages</option><option>13–17</option><option>18–24</option><option>25–30</option><option>31–40</option><option>41+</option></select>
 <select id="farea"><option value="">All growth areas</option></select>
 </div>
-<div id="list"></div>
+<div id="list"></div></div>
+<div id="vForm" style="display:none"><div id="fbody"></div></div>
+<div id="vSet" style="display:none"><div id="sbody"></div></div>
 </div></div>
 <div id="msg"></div>
 
@@ -101,8 +110,6 @@ var FIREBASE_CONFIG = {
   messagingSenderId: "620801847493",
   appId: "1:620801847493:web:87eabd3c844c7418afc0ac"
 };
-// Paste your WhatsApp group invite link here. It is added to the approval message.
-var GROUP_LINK = "https://chat.whatsapp.com/YOUR_LINK";
 var COL = 'luxora_applications';
 
 var db=null, auth=null, apps=[], tab='pending';
@@ -117,7 +124,7 @@ var SAMPLE=[{id:'s1',name:'Amara Okoye',email:'amara@example.com',whatsapp:'+234
 if(FIREBASE_CONFIG){firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();auth=firebase.auth()}
 
 function start(){
-  $('login').style.display='none';$('app').style.display='block';
+  $('login').style.display='none';$('app').style.display='block';loadConfig();
   if(!db){$('demo').style.display='block';apps=SAMPLE;render();return}
   db.collection(COL).orderBy('createdAt','desc').onSnapshot(function(s){
     apps=s.docs.map(function(d){var x=d.data();x.id=d.id;return x});render();
@@ -180,6 +187,124 @@ document.addEventListener('click',function(e){
   if(confirm('Remove '+em+' as an admin? They will lose access immediately.'))db.collection('admins').doc(em).delete().then(function(){toast('Admin removed')}).catch(function(){toast('Could not remove admin')});
 });
 
+var DEFAULT_FORM={"sections": [{"id": "s1", "title": "About you", "heading": "First, who are you?", "questions": [{"id": "name", "label": "Full name", "type": "text", "required": true, "on": true, "half": true}, {"id": "email", "label": "Email address", "type": "email", "required": true, "on": true, "half": true}, {"id": "whatsapp", "label": "WhatsApp number", "type": "tel", "required": true, "on": true, "hint": "Include your country code, e.g. +234", "placeholder": "+234 801 234 5678"}, {"id": "gender", "label": "Gender", "type": "radio", "required": true, "on": true, "options": ["Female", "Male"], "half": true}, {"id": "age", "label": "Age", "type": "select", "required": true, "on": true, "options": ["13–17", "18–24", "25–30", "31–40", "41+"], "half": true}, {"id": "country", "label": "Country", "type": "text", "required": true, "on": true, "half": true}, {"id": "city", "label": "City", "type": "text", "required": true, "on": true, "half": true}, {"id": "status", "label": "Current status", "type": "select", "required": true, "on": true, "options": ["Secondary School Student", "Undergraduate Student", "Graduate", "Employed / Working Professional", "Entrepreneur / Freelancer", "Other"]}, {"id": "active", "label": "When are you most active on WhatsApp?", "type": "radio", "required": true, "on": true, "options": ["Morning (8:00 AM – 10:00 AM)", "Afternoon (1:00 PM – 3:00 PM)", "Evening (7:00 PM – 10:00 PM)", "Late night (after 10:00 PM)"]}]}, {"id": "s2", "title": "Intent and alignment", "heading": "What brings you to Luxora?", "questions": [{"id": "goal", "label": "What is your biggest goal in this season of your life?", "type": "text", "required": true, "on": true}, {"id": "why", "label": "Why do you want to join the Luxora Circle right now?", "type": "textarea", "required": true, "on": true, "hint": "Take your time. Write at least 150 characters.", "minChars": 150}, {"id": "blocker", "label": "What has stopped you from growing so far?", "type": "textarea", "required": true, "on": true}, {"id": "areas", "label": "Where do you need the most growth and support?", "type": "checkbox", "required": true, "on": true, "hint": "Choose 2", "min": 2, "max": 2, "options": ["Personal identity, mindset and unlearning old habits", "Career clarity and skill positioning", "Consistency, discipline and daily systems", "Spiritual alignment and purpose", "Relationships and emotional intelligence", "Health, fitness and wellbeing", "Finance and wealth habits"]}, {"id": "outcome", "label": "What ONE specific outcome do you want from this community?", "type": "text", "required": true, "on": true}]}, {"id": "s3", "title": "Commitment", "heading": "Are you ready to show up?", "questions": [{"id": "ready", "label": "Luxora is built on participation and execution. How ready are you to show up, contribute and engage weekly?", "type": "scale", "required": true, "on": true, "hint": "1 is not ready, 5 is fully ready"}, {"id": "hours", "label": "How many hours a week can you give to the Circle?", "type": "select", "required": true, "on": true, "options": ["1–2 hours", "3–5 hours", "6+ hours"]}, {"id": "contribute", "label": "What can you contribute to the Circle?", "type": "textarea", "required": true, "on": true, "hint": "A skill, a gift, a perspective, a habit you can model"}, {"id": "before", "label": "Have you been part of a community like this before?", "type": "radio", "required": true, "on": true, "options": ["Yes", "No"]}, {"id": "heard", "label": "How did you hear about Luxora Circle?", "type": "select", "required": true, "on": true, "options": ["WhatsApp", "Instagram", "X / Twitter", "TikTok", "A friend or member", "Other"], "half": true}, {"id": "referredBy", "label": "Referred by", "type": "text", "required": false, "on": true, "half": true}, {"id": "commit_weekly", "label": "I commit to showing up weekly.", "type": "agree", "required": true, "on": true}, {"id": "agree_rules", "label": "I agree to respect other members, keep what is shared confidential and not spam the Circle.", "type": "agree", "required": true, "on": true}]}]};
+var DEFAULTS={"open": true, "closedMessage": "Applications are closed right now. Check back soon.", "heroTitle": "Awaken to who you are. Become who you choose to be.", "heroText": "Luxora Circle is a members-only community for people who are intentionally becoming. We show up weekly, we do the work, and we grow together.", "groupLink": "", "tplApproved": "Hi {name}, welcome to the Luxora Circle! Your application has been approved. Join the community here: {link}\n\nWe are glad to have you. Show up, contribute and grow with us.", "tplWaitlist": "Hi {name}, thank you for applying to the Luxora Circle. We loved your application and have placed you on our waitlist. We will message you as soon as a place opens.", "tplDecline": "Hi {name}, thank you for applying to the Luxora Circle and for the time you put into your answers. We are not able to offer you a place right now. You are welcome to apply again in future."};
+var form=null,settings=null,openQ={},fDirty=false,sDirty=false;
+var TYPES={text:'Short answer',textarea:'Long answer',email:'Email',tel:'Phone number',select:'Dropdown',radio:'Single choice',checkbox:'Multiple choice',scale:'Scale 1 to 5',agree:'Agreement checkbox'};
+var CORE={name:1,email:1,whatsapp:1};
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function nid(){return 'q_'+Math.random().toString(36).slice(2,8)}
+function loadConfig(){
+  if(form)return;
+  if(!db){form=clone(DEFAULT_FORM);settings=clone(DEFAULTS);renderForm();renderSet();return}
+  Promise.all([db.collection('config').doc('form').get(),db.collection('config').doc('settings').get()]).then(function(r){
+    form=r[0].exists?r[0].data():clone(DEFAULT_FORM);
+    settings=Object.assign(clone(DEFAULTS),r[1].exists?r[1].data():{});
+    renderForm();renderSet();render();
+  }).catch(function(){toast('Could not load form settings')});
+}
+function chk(k,v,dis,txt,at){return '<label class="chk"><input type="checkbox" data-qf="'+k+'"'+at+(v?' checked':'')+(dis?' disabled':'')+'> '+txt+'</label>'}
+function fld(k,lab,val,at,extra){return '<div class="fld"><label>'+lab+'</label><input data-qf="'+k+'"'+at+' value="'+esc(val)+'"'+(extra||'')+'></div>'}
+function qrow(si,q,qi){
+  var core=CORE[q.id],op=openQ[q.id],at=' data-si="'+si+'" data-qi="'+qi+'"',t=q.type;
+  var h='<div class="qr"><div class="h"><div><b>'+esc(q.label||'Untitled')+'</b><div class="meta">'+TYPES[t]+(q.required?' · required':' · optional')+(q.on===false?' · hidden':'')+'</div></div><div class="acts" style="margin:0">'
+   +'<button class="btn ghost iconb" data-fx="qmove" data-dir="-1"'+at+' aria-label="Move up">↑</button><button class="btn ghost iconb" data-fx="qmove" data-dir="1"'+at+' aria-label="Move down">↓</button>'
+   +'<button class="btn ghost iconb" data-fx="qedit"'+at+'>'+(op?'Done':'Edit')+'</button>'+(core?'':'<button class="btn ghost iconb" data-fx="qdel"'+at+'>Delete</button>')+'</div></div>';
+  if(op){
+    h+=fld('label','Question',q.label,at)+fld('hint','Hint (optional)',q.hint||'',at)
+     +'<div class="fld"><label>Answer type</label><select data-qf="type"'+at+(core?' disabled':'')+'>'+Object.keys(TYPES).map(function(k){return '<option value="'+k+'"'+(k===t?' selected':'')+'>'+TYPES[k]+'</option>'}).join('')+'</select></div>';
+    if(/^(text|email|tel|textarea)$/.test(t))h+=fld('placeholder','Placeholder (optional)',q.placeholder||'',at);
+    if(/^(select|radio|checkbox)$/.test(t))h+='<div class="fld"><label>Options (one per line)</label><textarea data-qf="options"'+at+' style="min-height:110px">'+esc((q.options||[]).join('\n'))+'</textarea></div>';
+    if(t==='checkbox')h+=fld('min','Minimum to choose (0 for none)',q.min||0,at,' type="number" min="0"')+fld('max','Maximum to choose (0 for no limit)',q.max||0,at,' type="number" min="0"');
+    if(t==='textarea')h+=fld('minChars','Minimum characters (0 for none)',q.minChars||0,at,' type="number" min="0"');
+    h+=chk('required',q.required||core,core,'Required',at)+chk('on',q.on!==false,core,'Visible to applicants',at)+(/^(text|email|tel|select)$/.test(t)?chk('half',!!q.half,false,'Half width (sits beside the next half-width question)',at):'');
+  }
+  return h+'</div>';
+}
+function renderForm(){
+  var h='<div class="card"><div class="h"><div><b style="font-size:17px">Form questions</b><div class="meta">Changes go live for applicants when you save.</div></div><div class="acts" style="margin:0"><button class="btn ghost" data-fx="reset">Reset to default</button><button class="btn" data-fx="save">Save and publish</button></div></div><div class="meta" id="fdirty" style="margin-top:8px">'+(fDirty?'Unsaved changes':'')+'</div></div>';
+  form.sections.forEach(function(s,si){
+    h+='<div class="card"><div class="meta">Step '+(si+1)+'</div><div class="fld"><label>Step name</label><input data-sf="title" data-si="'+si+'" value="'+esc(s.title)+'"></div><div class="fld"><label>Headline shown to applicants</label><input data-sf="heading" data-si="'+si+'" value="'+esc(s.heading||'')+'"></div>';
+    s.questions.forEach(function(q,qi){h+=qrow(si,q,qi)});
+    h+='<div class="acts"><button class="btn ghost" data-fx="addq" data-si="'+si+'">+ Add question</button><button class="btn ghost iconb" data-fx="smove" data-dir="-1" data-si="'+si+'">Step ↑</button><button class="btn ghost iconb" data-fx="smove" data-dir="1" data-si="'+si+'">Step ↓</button>'+(form.sections.length>1?'<button class="btn ghost iconb" data-fx="sdel" data-si="'+si+'">Delete step</button>':'')+'</div></div>';
+  });
+  $('fbody').innerHTML=h+'<button class="btn ghost" data-fx="adds">+ Add step</button>';
+}
+function markF(){fDirty=true;var e=$('fdirty');if(e)e.textContent='Unsaved changes'}
+function renderSet(){
+  var s=settings;
+  function fl(k,lab,ta,hint){return '<div class="fld"><label>'+lab+'</label>'+(ta?'<textarea data-set="'+k+'" style="min-height:90px">'+esc(s[k])+'</textarea>':'<input data-set="'+k+'" value="'+esc(s[k])+'">')+(hint?'<div class="meta">'+hint+'</div>':'')+'</div>'}
+  $('sbody').innerHTML='<div class="card"><b>Applications</b><label class="chk"><input type="checkbox" data-set="open"'+(s.open!==false?' checked':'')+'> Accepting applications</label>'+fl('closedMessage','Message shown when closed',1)+'</div>'
+   +'<div class="card"><b>Landing page</b>'+fl('heroTitle','Headline')+fl('heroText','Intro text',1)+'</div>'
+   +'<div class="card"><b>WhatsApp messages</b>'+fl('groupLink','Group invite link')+fl('tplApproved','Approved message',1,'Use {name} for the first name and {link} for the group link.')+fl('tplWaitlist','Waitlist message',1)+fl('tplDecline','Decline message',1)+'</div>'
+   +'<button class="btn" data-fx="sset">Save settings</button> <span class="meta" id="sdirty">'+(sDirty?'Unsaved changes':'')+'</span>';
+}
+function checkForm(){
+  for(var i=0;i<form.sections.length;i++){
+    var s=form.sections[i],vis=0;
+    if(!(s.title||'').trim())return 'Give step '+(i+1)+' a name.';
+    for(var j=0;j<s.questions.length;j++){
+      var q=s.questions[j];
+      if(!(q.label||'').trim())return 'Every question needs text (step '+(i+1)+').';
+      if(/^(select|radio|checkbox)$/.test(q.type)&&(q.options||[]).length<2)return '"'+q.label+'" needs at least 2 options.';
+      if(q.type==='checkbox'){if(q.max&&q.min>q.max)return 'On "'+q.label+'" the minimum is higher than the maximum.';if(q.max&&q.max>q.options.length)return 'On "'+q.label+'" the maximum is more than the number of options.'}
+      if(CORE[q.id]){q.required=true;q.on=true}
+      if(q.on!==false)vis++;
+    }
+    if(!vis)return 'Step "'+s.title+'" has no visible questions.';
+  }
+  return '';
+}
+function mv(a,i,d){var j=i+d;if(j<0||j>=a.length)return;var x=a[i];a[i]=a[j];a[j]=x}
+document.addEventListener('click',function(e){
+  var t=e.target,d=t.dataset;
+  if(d.v){['vApps','vForm','vSet'].forEach(function(id){$(id).style.display=id===d.v?'block':'none'});[].forEach.call(document.querySelectorAll('#views .tab'),function(b){b.classList.toggle('on',b===t)});document.querySelector('.top h1').textContent=d.v==='vApps'?'Applications':d.v==='vForm'?'Form':'Settings';return}
+  var fx=d.fx;if(!fx)return;
+  var si=+d.si,qi=+d.qi,secs=form&&form.sections;
+  if(fx==='sset'){
+    if(!db){toast('Demo mode');return}
+    db.collection('config').doc('settings').set(clone(settings)).then(function(){sDirty=false;$('sdirty').textContent='';toast('Settings saved')}).catch(function(){toast('Could not save settings')});return;
+  }
+  if(!form)return;
+  if(fx==='save'){
+    var m=checkForm();if(m){toast(m);return}
+    if(!db){toast('Demo mode');return}
+    var out=clone(form);out.updatedAt=new Date().toISOString();out.updatedBy=me.email;
+    db.collection('config').doc('form').set(out).then(function(){fDirty=false;renderForm();toast('Form published')}).catch(function(){toast('Could not save the form')});return;
+  }
+  if(fx==='reset'){if(confirm('Replace the form with the original default questions? This is not saved until you click Save and publish.')){form=clone(DEFAULT_FORM);fDirty=true;renderForm()}return}
+  if(fx==='addq'){var q={id:nid(),label:'New question',hint:'',type:'text',required:true,options:[],on:true};secs[si].questions.push(q);openQ[q.id]=1}
+  else if(fx==='qmove')mv(secs[si].questions,qi,+d.dir);
+  else if(fx==='qedit'){var id=secs[si].questions[qi].id;openQ[id]=!openQ[id];renderForm();return}
+  else if(fx==='qdel'){if(!confirm('Delete this question? Answers already submitted are kept.'))return;secs[si].questions.splice(qi,1)}
+  else if(fx==='smove')mv(secs,si,+d.dir);
+  else if(fx==='sdel'){if(!confirm('Delete this whole step and its questions?'))return;secs.splice(si,1)}
+  else if(fx==='adds')secs.push({id:'s_'+nid(),title:'New step',heading:'',questions:[]});
+  else return;
+  fDirty=true;renderForm();
+});
+$('fbody').addEventListener('input',function(e){
+  var t=e.target,d=t.dataset;
+  if(d.sf){form.sections[+d.si][d.sf]=t.value;markF();return}
+  if(!d.qf)return;
+  var q=form.sections[+d.si].questions[+d.qi],k=d.qf;
+  if(k==='options')q.options=t.value.split('\n').map(function(x){return x.trim()}).filter(Boolean);
+  else if(k==='min'||k==='max'||k==='minChars')q[k]=Math.max(0,parseInt(t.value,10)||0);
+  else if(t.type==='checkbox')q[k]=t.checked;
+  else q[k]=t.value;
+  markF();
+  if(k==='type'){if(/^(select|radio|checkbox)$/.test(q.type)&&!(q.options||[]).length)q.options=['Option 1','Option 2'];renderForm()}
+});
+$('sbody').addEventListener('input',function(e){
+  var t=e.target,k=t.dataset.set;if(!k)return;
+  settings[k]=t.type==='checkbox'?t.checked:t.value;sDirty=true;$('sdirty').textContent='Unsaved changes';
+});
+function tpl(a){
+  var s=settings||DEFAULTS,s0=st(a),k=s0==='approved'?'tplApproved':s0==='waitlisted'?'tplWaitlist':'tplDecline';
+  return String(s[k]||DEFAULTS[k]).replace(/\{name\}/g,(a.name||'').split(' ')[0]).replace(/\{link\}/g,s.groupLink||'[add your group link in Settings]');
+}
+function extras(a,row){return Object.keys(a.labels||{}).map(function(k){var v=a[k];if(Array.isArray(v))v=v.join(', ');if(v===true)v='Yes';if(v===false)v='No';return row(a.labels[k],v)}).join('')}
+
 function st(a){return a.status_review||'pending'}
 function render(){
   var counts={all:apps.length};STATUSES.forEach(function(s){counts[s]=apps.filter(function(a){return st(a)===s}).length});
@@ -205,7 +330,7 @@ function card(a){
   +'<div class="why">'+esc(a.why)+'</div>'
   +'<div class="chips">'+(a.areas||[]).map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</div>'
   +row('Goal',a.goal)+row('Outcome wanted',a.outcome)
-  +'<div class="more" id="m-'+esc(a.id)+'">'+row('What has stopped them',a.blocker)+row('Can contribute',a.contribute)+row('Status',a.status)+row('Readiness (1–5)',a.ready)+row('Hours per week',a.hours)+row('Most active on WhatsApp',a.active)+row('Community before',a.before)+row('Heard via',a.heard+(a.referredBy?' (referred by '+a.referredBy+')':''))+row('Email',a.email)+row('WhatsApp',a.whatsapp)+'</div>'
+  +'<div class="more" id="m-'+esc(a.id)+'">'+row('What has stopped them',a.blocker)+row('Can contribute',a.contribute)+row('Status',a.status)+row('Readiness (1–5)',a.ready)+row('Hours per week',a.hours)+row('Most active on WhatsApp',a.active)+row('Community before',a.before)+row('Heard via',a.heard+(a.referredBy?' (referred by '+a.referredBy+')':''))+row('Email',a.email)+row('WhatsApp',a.whatsapp)+extras(a,row)+'</div>'
   +'<div class="stars" style="margin-top:10px">'+stars+'</div>'
   +'<textarea class="note" data-note="'+esc(a.id)+'" placeholder="Admin note (saves when you click away)">'+esc(a.adminNote||'')+'</textarea>'
   +'<div class="acts"><button class="btn ok" data-set="approved" data-id="'+esc(a.id)+'">Approve</button><button class="btn wait" data-set="waitlisted" data-id="'+esc(a.id)+'">Waitlist</button><button class="btn no" data-set="declined" data-id="'+esc(a.id)+'">Decline</button>'
@@ -214,13 +339,7 @@ function card(a){
   +(s!=='pending'?'<a class="btn" target="_blank" rel="noopener" href="'+wa(a)+'">Message on WhatsApp</a>':'')
   +'</div></div>';
 }
-function wa(a){
-  var n=(a.name||'').split(' ')[0],s=st(a),t;
-  if(s==='approved')t='Hi '+n+', welcome to the Luxora Circle! Your application has been approved. Join the community here: '+GROUP_LINK+'\n\nWe are glad to have you. Show up, contribute and grow with us.';
-  else if(s==='waitlisted')t='Hi '+n+', thank you for applying to the Luxora Circle. We loved your application and have placed you on our waitlist. We will message you as soon as a place opens.';
-  else t='Hi '+n+', thank you for applying to the Luxora Circle and for the time you put into your answers. We are not able to offer you a place right now. You are welcome to apply again in future.';
-  return 'https://wa.me/'+String(a.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(t);
-}
+function wa(a){return 'https://wa.me/'+String(a.whatsapp||'').replace(/\D/g,'')+'?text='+encodeURIComponent(tpl(a))}
 function save(id,patch){
   var a=apps.filter(function(x){return x.id===id})[0];if(!a)return;
   for(var k in patch)a[k]=patch[k];
@@ -242,7 +361,9 @@ document.addEventListener('focusout',function(e){
 ['q','fage','farea'].forEach(function(i){$(i).addEventListener('input',render)});
 
 $('csv').onclick=function(){
-  var cols=['createdAt','status_review','rating','name','email','whatsapp','gender','age','country','city','status','active','goal','why','blocker','areas','outcome','ready','hours','contribute','before','heard','referredBy','adminNote'];
+  var base=['createdAt','status_review','rating','name','email','whatsapp','gender','age','country','city','status','active','goal','why','blocker','areas','outcome','ready','hours','contribute','before','heard','referredBy'],ex={};
+  apps.forEach(function(a){Object.keys(a).forEach(function(k){if(base.indexOf(k)<0&&k!=='id'&&k!=='labels'&&k!=='adminNote')ex[k]=1})});
+  var cols=base.concat(Object.keys(ex),['adminNote']);
   function c(v){v=Array.isArray(v)?v.join('; '):(v==null?'':String(v));if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'}
   var csv=[cols.join(',')].concat(apps.map(function(a){return cols.map(function(k){return c(a[k])}).join(',')})).join('\n');
   var l=document.createElement('a');l.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));l.download='luxora-applications.csv';l.click();

@@ -114,8 +114,8 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <body>
 <header class="hero"><div class="wrap">
 <img class="logo" src="logo.png" alt="Luxora">
-<h1>Awaken to who you are. Become who you choose to be.</h1>
-<p>Luxora Circle is a members-only community for people who are intentionally becoming. We show up weekly, we do the work, and we grow together.</p>
+<h1 id="heroTitle">Awaken to who you are. Become who you choose to be.</h1>
+<p id="heroText">Luxora Circle is a members-only community for people who are intentionally becoming. We show up weekly, we do the work, and we grow together.</p>
 <a class="btn" href="#apply">Apply to join</a>
 </div></header>
 
@@ -144,85 +144,12 @@ footer{padding:40px 0;text-align:center;color:var(--mute);font-size:14px;border-
 <div id="stitle"></div>
 
 <form id="f" novalidate>
-<div class="step on" data-name="About you" data-title="First, who are you?">
-<div class="row">
-<div><label class="q" for="name">Full name</label><input type="text" id="name" name="name" autocomplete="name" required></div>
-<div><label class="q" for="email">Email address</label><input type="email" id="email" name="email" autocomplete="email" required></div>
-</div>
-<label class="q" for="wa">WhatsApp number<span class="hint">Include your country code, e.g. +234</span></label>
-<input type="tel" id="wa" name="whatsapp" placeholder="+234 801 234 5678" required>
-<div class="row">
-<div><span class="q">Gender</span><div class="opts">
-<label class="opt"><input type="radio" name="gender" value="Female" required> Female</label>
-<label class="opt"><input type="radio" name="gender" value="Male"> Male</label></div></div>
-<div><label class="q" for="age">Age</label><select id="age" name="age" required>
-<option value="">Select</option><option>13–17</option><option>18–24</option><option>25–30</option><option>31–40</option><option>41+</option></select>
-<p class="note" id="minor">Members under 18 need a parent or guardian's consent before they can be approved.</p></div>
-</div>
-<div class="row">
-<div><label class="q" for="country">Country</label><input type="text" id="country" name="country" required></div>
-<div><label class="q" for="city">City</label><input type="text" id="city" name="city" required></div>
-</div>
-<label class="q" for="status">Current status</label>
-<select id="status" name="status" required><option value="">Select</option><option>Secondary School Student</option><option>Undergraduate Student</option><option>Graduate</option><option>Employed / Working Professional</option><option>Entrepreneur / Freelancer</option><option>Other</option></select>
-<span class="q">When are you most active on WhatsApp?</span>
-<div class="opts two" data-req="active">
-<label class="opt"><input type="radio" name="active" value="Morning"> Morning (8:00 AM – 10:00 AM)</label>
-<label class="opt"><input type="radio" name="active" value="Afternoon"> Afternoon (1:00 PM – 3:00 PM)</label>
-<label class="opt"><input type="radio" name="active" value="Evening"> Evening (7:00 PM – 10:00 PM)</label>
-<label class="opt"><input type="radio" name="active" value="Late night"> Late night (after 10:00 PM)</label>
-</div>
-</div>
-
-<div class="step" data-name="Intent and alignment" data-title="What brings you to Luxora?">
-<label class="q" for="goal">What is your biggest goal in this season of your life?</label>
-<input type="text" id="goal" name="goal" required>
-<label class="q" for="why">Why do you want to join the Luxora Circle right now?<span class="hint">Take your time. Write at least 150 characters.</span></label>
-<textarea id="why" name="why" required></textarea><div class="count" id="cnt">0 / 150</div>
-<label class="q" for="block">What has stopped you from growing so far?</label>
-<textarea id="block" name="blocker" style="min-height:100px" required></textarea>
-<span class="q">Where do you need the most growth and support? <span class="hint">Choose 2</span></span>
-<div class="opts two" id="areas" data-req="areas">
-<label class="opt"><input type="checkbox" name="areas" value="Identity, mindset and unlearning old habits"> Personal identity, mindset and unlearning old habits</label>
-<label class="opt"><input type="checkbox" name="areas" value="Career clarity and skill positioning"> Career clarity and skill positioning</label>
-<label class="opt"><input type="checkbox" name="areas" value="Consistency, discipline and daily systems"> Consistency, discipline and daily systems</label>
-<label class="opt"><input type="checkbox" name="areas" value="Spiritual alignment and purpose"> Spiritual alignment and purpose</label>
-<label class="opt"><input type="checkbox" name="areas" value="Relationships and emotional intelligence"> Relationships and emotional intelligence</label>
-<label class="opt"><input type="checkbox" name="areas" value="Health, fitness and wellbeing"> Health, fitness and wellbeing</label>
-<label class="opt"><input type="checkbox" name="areas" value="Finance and wealth habits"> Finance and wealth habits</label>
-</div>
-<label class="q" for="outcome">What ONE specific outcome do you want from this community?</label>
-<input type="text" id="outcome" name="outcome" required>
-</div>
-
-<div class="step" data-title="Are you ready to show up?" data-name="Commitment">
-<span class="q">Luxora is built on participation and execution. How ready are you to show up, contribute and engage weekly?<span class="hint">1 is not ready, 5 is fully ready</span></span>
-<div class="scale" data-req="ready">
-<label class="opt"><input type="radio" name="ready" value="1">1</label><label class="opt"><input type="radio" name="ready" value="2">2</label><label class="opt"><input type="radio" name="ready" value="3">3</label><label class="opt"><input type="radio" name="ready" value="4">4</label><label class="opt"><input type="radio" name="ready" value="5">5</label>
-</div>
-<label class="q" for="hours">How many hours a week can you give to the Circle?</label>
-<select id="hours" name="hours" required><option value="">Select</option><option>1–2 hours</option><option>3–5 hours</option><option>6+ hours</option></select>
-<label class="q" for="contrib">What can you contribute to the Circle?<span class="hint">A skill, a gift, a perspective, a habit you can model</span></label>
-<textarea id="contrib" name="contribute" style="min-height:100px" required></textarea>
-<span class="q">Have you been part of a community like this before?</span>
-<div class="opts two" data-req="before">
-<label class="opt"><input type="radio" name="before" value="Yes"> Yes</label>
-<label class="opt"><input type="radio" name="before" value="No"> No</label></div>
-<div class="row">
-<div><label class="q" for="heard">How did you hear about Luxora Circle?</label>
-<select id="heard" name="heard" required><option value="">Select</option><option>WhatsApp</option><option>Instagram</option><option>X / Twitter</option><option>TikTok</option><option>A friend or member</option><option>Other</option></select></div>
-<div><label class="q" for="ref">Referred by <span class="hint">Optional</span></label><input type="text" id="ref" name="referredBy"></div>
-</div>
-<div class="opts" style="margin-top:26px">
-<label class="opt"><input type="checkbox" id="c1"> I commit to showing up weekly.</label>
-<label class="opt"><input type="checkbox" id="c2"> I agree to respect other members, keep what is shared confidential and not spam the Circle.</label>
-</div>
-</div>
-
+<div id="steps"><p>Loading the form…</p></div>
 <div class="err" id="err" role="alert"></div>
 <div class="nav"><button type="button" class="btn ghost" id="back" style="visibility:hidden">Back</button><button type="button" class="btn" id="next">Continue</button></div>
 </form>
 
+<p id="closed" style="display:none;margin-top:22px"></p>
 <div class="done" id="done">
 <h3>Application received</h3>
 <p>Thank you for applying. We review every application personally, and if you are approved we will message you on WhatsApp. Keep your phone close.</p>
@@ -253,62 +180,117 @@ var FIREBASE_CONFIG = {
 var db = null;
 try{ if(FIREBASE_CONFIG){ firebase.initializeApp(FIREBASE_CONFIG); db = firebase.firestore(); } }catch(e){ console.error(e); }
 
-var steps=[].slice.call(document.querySelectorAll('.step')), cur=0;
-var f=document.getElementById('f'), err=document.getElementById('err'), nextB=document.getElementById('next'), backB=document.getElementById('back');
+var DEFAULT_FORM={"sections": [{"id": "s1", "title": "About you", "heading": "First, who are you?", "questions": [{"id": "name", "label": "Full name", "type": "text", "required": true, "on": true, "half": true}, {"id": "email", "label": "Email address", "type": "email", "required": true, "on": true, "half": true}, {"id": "whatsapp", "label": "WhatsApp number", "type": "tel", "required": true, "on": true, "hint": "Include your country code, e.g. +234", "placeholder": "+234 801 234 5678"}, {"id": "gender", "label": "Gender", "type": "radio", "required": true, "on": true, "options": ["Female", "Male"], "half": true}, {"id": "age", "label": "Age", "type": "select", "required": true, "on": true, "options": ["13–17", "18–24", "25–30", "31–40", "41+"], "half": true}, {"id": "country", "label": "Country", "type": "text", "required": true, "on": true, "half": true}, {"id": "city", "label": "City", "type": "text", "required": true, "on": true, "half": true}, {"id": "status", "label": "Current status", "type": "select", "required": true, "on": true, "options": ["Secondary School Student", "Undergraduate Student", "Graduate", "Employed / Working Professional", "Entrepreneur / Freelancer", "Other"]}, {"id": "active", "label": "When are you most active on WhatsApp?", "type": "radio", "required": true, "on": true, "options": ["Morning (8:00 AM – 10:00 AM)", "Afternoon (1:00 PM – 3:00 PM)", "Evening (7:00 PM – 10:00 PM)", "Late night (after 10:00 PM)"]}]}, {"id": "s2", "title": "Intent and alignment", "heading": "What brings you to Luxora?", "questions": [{"id": "goal", "label": "What is your biggest goal in this season of your life?", "type": "text", "required": true, "on": true}, {"id": "why", "label": "Why do you want to join the Luxora Circle right now?", "type": "textarea", "required": true, "on": true, "hint": "Take your time. Write at least 150 characters.", "minChars": 150}, {"id": "blocker", "label": "What has stopped you from growing so far?", "type": "textarea", "required": true, "on": true}, {"id": "areas", "label": "Where do you need the most growth and support?", "type": "checkbox", "required": true, "on": true, "hint": "Choose 2", "min": 2, "max": 2, "options": ["Personal identity, mindset and unlearning old habits", "Career clarity and skill positioning", "Consistency, discipline and daily systems", "Spiritual alignment and purpose", "Relationships and emotional intelligence", "Health, fitness and wellbeing", "Finance and wealth habits"]}, {"id": "outcome", "label": "What ONE specific outcome do you want from this community?", "type": "text", "required": true, "on": true}]}, {"id": "s3", "title": "Commitment", "heading": "Are you ready to show up?", "questions": [{"id": "ready", "label": "Luxora is built on participation and execution. How ready are you to show up, contribute and engage weekly?", "type": "scale", "required": true, "on": true, "hint": "1 is not ready, 5 is fully ready"}, {"id": "hours", "label": "How many hours a week can you give to the Circle?", "type": "select", "required": true, "on": true, "options": ["1–2 hours", "3–5 hours", "6+ hours"]}, {"id": "contribute", "label": "What can you contribute to the Circle?", "type": "textarea", "required": true, "on": true, "hint": "A skill, a gift, a perspective, a habit you can model"}, {"id": "before", "label": "Have you been part of a community like this before?", "type": "radio", "required": true, "on": true, "options": ["Yes", "No"]}, {"id": "heard", "label": "How did you hear about Luxora Circle?", "type": "select", "required": true, "on": true, "options": ["WhatsApp", "Instagram", "X / Twitter", "TikTok", "A friend or member", "Other"], "half": true}, {"id": "referredBy", "label": "Referred by", "type": "text", "required": false, "on": true, "half": true}, {"id": "commit_weekly", "label": "I commit to showing up weekly.", "type": "agree", "required": true, "on": true}, {"id": "agree_rules", "label": "I agree to respect other members, keep what is shared confidential and not spam the Circle.", "type": "agree", "required": true, "on": true}]}]};
+var DEFAULT_KEYS=["name", "email", "whatsapp", "gender", "age", "country", "city", "status", "active", "goal", "why", "blocker", "areas", "outcome", "ready", "hours", "contribute", "before", "heard", "referredBy"];
+var DEFAULTS={"open": true, "closedMessage": "Applications are closed right now. Check back soon.", "heroTitle": "Awaken to who you are. Become who you choose to be.", "heroText": "Luxora Circle is a members-only community for people who are intentionally becoming. We show up weekly, we do the work, and we grow together.", "groupLink": "", "tplApproved": "Hi {name}, welcome to the Luxora Circle! Your application has been approved. Join the community here: {link}\n\nWe are glad to have you. Show up, contribute and grow with us.", "tplWaitlist": "Hi {name}, thank you for applying to the Luxora Circle. We loved your application and have placed you on our waitlist. We will message you as soon as a place opens.", "tplDecline": "Hi {name}, thank you for applying to the Luxora Circle and for the time you put into your answers. We are not able to offer you a place right now. You are welcome to apply again in future."};
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var form=DEFAULT_FORM,settings=DEFAULTS,steps=[],cur=0;
+var f=$('f'),err=$('err'),nextB=$('next'),backB=$('back');
+function qOf(k){var r=null;form.sections.forEach(function(s){s.questions.forEach(function(q){if(q.id===k)r=q})});return r||{}}
+function inp(q,t){return '<input type="'+t+'" id="f_'+esc(q.id)+'" name="'+esc(q.id)+'"'+(q.placeholder?' placeholder="'+esc(q.placeholder)+'"':'')+(q.id==='email'?' autocomplete="email"':q.id==='name'?' autocomplete="name"':'')+'>'}
+function qHTML(q){
+  var k=esc(q.id),t=q.type,o=q.options||[],b='',opt=q.required?'':' <span class="hint" style="display:inline">(optional)</span>',h=q.hint?'<span class="hint">'+esc(q.hint)+'</span>':'';
+  var head='<label class="q" for="f_'+k+'">'+esc(q.label)+opt+h+'</label>',sh='<span class="q">'+esc(q.label)+opt+h+'</span>';
+  if(t==='text'||t==='email'||t==='tel')b=head+inp(q,t);
+  else if(t==='textarea')b=head+'<textarea id="f_'+k+'" name="'+k+'" data-min="'+(q.minChars||0)+'" style="min-height:'+(q.minChars?150:100)+'px"></textarea>'+(q.minChars?'<div class="count" data-cnt="'+k+'">0 / '+q.minChars+'</div>':'');
+  else if(t==='select')b=head+'<select id="f_'+k+'" name="'+k+'"><option value="">Select</option>'+o.map(function(x){return '<option>'+esc(x)+'</option>'}).join('')+'</select>';
+  else if(t==='radio'||t==='checkbox')b=sh+'<div class="opts'+(!q.half&&o.length>2?' two':'')+'">'+o.map(function(x){return '<label class="opt"><input type="'+t+'" name="'+k+'" value="'+esc(x)+'"> '+esc(x)+'</label>'}).join('')+'</div>';
+  else if(t==='scale')b=sh+'<div class="scale">'+[1,2,3,4,5].map(function(x){return '<label class="opt"><input type="radio" name="'+k+'" value="'+x+'">'+x+'</label>'}).join('')+'</div>';
+  else if(t==='agree')b='<label class="opt" style="margin-top:14px"><input type="checkbox" name="'+k+'"> '+esc(q.label)+'</label>';
+  if(q.id==='age')b+='<p class="note" id="minor">Members under 18 need a parent or guardian\'s consent before they can be approved.</p>';
+  return '<div class="qw" data-key="'+k+'" data-type="'+t+'">'+b+'</div>';
+}
+function secHTML(s){
+  var qs=s.questions.filter(function(q){return q.on!==false}),h='',i=0;
+  while(i<qs.length){
+    if(qs[i].half&&qs[i+1]&&qs[i+1].half){h+='<div class="row">'+qHTML(qs[i])+qHTML(qs[i+1])+'</div>';i+=2}
+    else{h+=qHTML(qs[i]);i++}
+  }
+  return h;
+}
+function build(){
+  var h='';
+  form.sections.forEach(function(s){var b=secHTML(s);if(b)h+='<div class="step" data-name="'+esc(s.title)+'" data-title="'+esc(s.heading||s.title)+'">'+b+'</div>'});
+  $('steps').innerHTML=h;steps=[].slice.call(document.querySelectorAll('.step'));show(0,true);
+}
+function applySettings(){
+  if(settings.heroTitle)$('heroTitle').textContent=settings.heroTitle;
+  if(settings.heroText)$('heroText').textContent=settings.heroText;
+  if(settings.open===false){
+    f.style.display='none';document.querySelector('.bar').style.display='none';$('sname').style.display='none';$('stitle').style.display='none';
+    $('closed').style.display='block';$('closed').textContent=settings.closedMessage||DEFAULTS.closedMessage;
+  }
+}
+function init(){
+  var done=false;
+  function go(fm,st){if(done)return;done=true;if(fm&&fm.sections&&fm.sections.length)form=fm;settings=Object.assign({},DEFAULTS,st||{});applySettings();build()}
+  if(!db){go();return}
+  var to=setTimeout(function(){go()},3000);
+  Promise.all([db.collection('config').doc('form').get(),db.collection('config').doc('settings').get()]).then(function(r){
+    clearTimeout(to);go(r[0].exists?r[0].data():null,r[1].exists?r[1].data():null);
+  }).catch(function(){clearTimeout(to);go()});
+}
 function show(i,quiet){
-  cur=i; steps.forEach(function(s,k){s.classList.toggle('on',k===i)});
-  document.getElementById('fill').style.width=((i+1)/steps.length*100)+'%';
-  document.getElementById('sname').textContent='Step '+(i+1)+' of '+steps.length+' · '+steps[i].dataset.name;document.getElementById('stitle').textContent=steps[i].dataset.title;
+  cur=i;steps.forEach(function(s,k){s.classList.toggle('on',k===i)});
+  $('fill').style.width=((i+1)/steps.length*100)+'%';
+  $('sname').textContent='Step '+(i+1)+' of '+steps.length+' · '+steps[i].dataset.name;$('stitle').textContent=steps[i].dataset.title;
   backB.style.visibility=i?'visible':'hidden';
   nextB.textContent=i===steps.length-1?'Submit application':'Continue';
-  err.textContent=''; if(!quiet)document.getElementById('apply').scrollIntoView();
+  err.textContent='';if(!quiet)$('apply').scrollIntoView();
 }
 function valid(i){
-  var s=steps[i];
-  var fields=[].slice.call(s.querySelectorAll('input[type=text],input[type=email],input[type=tel],select,textarea')).filter(function(x){return x.required});
-  for(var k=0;k<fields.length;k++){ if(!fields[k].value.trim()){fields[k].focus();return 'Please fill in every required question.'} }
-  var em=s.querySelector('#email'); if(em&&!/^\S+@\S+\.\S+$/.test(em.value)){em.focus();return 'Enter a valid email address.'}
-  var wa=s.querySelector('#wa'); if(wa&&!/^\+\d{8,15}$/.test(wa.value.replace(/[\s-]/g,''))){wa.focus();return 'Enter your WhatsApp number with country code, e.g. +234 801 234 5678.'}
-  if(s.querySelector('[name=gender]')&&!f.gender.value) return 'Select your gender.';
-  var req=s.querySelectorAll('[data-req]');
-  for(k=0;k<req.length;k++){
-    var n=req[k].dataset.req;
-    if(n==='areas'){ if(f.querySelectorAll('[name=areas]:checked').length!==2) return 'Choose exactly 2 growth areas.'; }
-    else if(!f[n].value) return 'Please answer every question on this step.';
+  var ws=steps[i].querySelectorAll('.qw');
+  for(var n=0;n<ws.length;n++){
+    var w=ws[n],t=w.dataset.type,q=qOf(w.dataset.key),lab=q.label,ip=w.querySelectorAll('input,select,textarea'),v;
+    if(t==='radio'||t==='scale'){if(q.required&&!w.querySelector('input:checked'))return 'Please answer: '+lab}
+    else if(t==='checkbox'){var c=w.querySelectorAll('input:checked').length,mn=q.min||(q.required?1:0);if(c<mn)return mn>1?'Choose '+(q.max===mn?'exactly ':'at least ')+mn+' for: '+lab:'Please answer: '+lab}
+    else if(t==='agree'){if(q.required&&!ip[0].checked)return 'Please tick: '+lab}
+    else{
+      v=ip[0].value.trim();
+      if(!v){if(q.required){ip[0].focus();return 'Please answer: '+lab}continue}
+      if(t==='email'&&!/^\S+@\S+\.\S+$/.test(v)){ip[0].focus();return 'Enter a valid email address.'}
+      if(t==='tel'&&!/^\+\d{8,15}$/.test(v.replace(/[\s-]/g,''))){ip[0].focus();return 'Enter a valid number with country code, e.g. +234 801 234 5678.'}
+      if(t==='textarea'&&q.minChars&&v.length<q.minChars){ip[0].focus();return 'Tell us a bit more for: '+lab+' (at least '+q.minChars+' characters).'}
+    }
   }
-  if(s.querySelector('#why')&&f.why.value.trim().length<150) return 'Tell us more about why you want to join (at least 150 characters).';
-  if(s.querySelector('#c1')&&!(document.getElementById('c1').checked&&document.getElementById('c2').checked)) return 'Tick both commitments to submit.';
   return '';
 }
-nextB.onclick=function(){
-  var m=valid(cur); if(m){err.textContent=m;return}
-  if(cur<steps.length-1){show(cur+1);return}
-  submit();
-};
+nextB.onclick=function(){var m=valid(cur);if(m){err.textContent=m;return}if(cur<steps.length-1){show(cur+1);return}submit()};
 backB.onclick=function(){show(cur-1)};
 f.addEventListener('change',function(e){
-  if(e.target.name==='areas'&&f.querySelectorAll('[name=areas]:checked').length>2){e.target.checked=false;err.textContent='You can choose only 2 areas.'}
-  if(e.target.id==='age')document.getElementById('minor').style.display=e.target.value==='13–17'?'block':'none';
+  var t=e.target;
+  if(t.type==='checkbox'){var q=qOf(t.name);if(q.type==='checkbox'&&q.max&&f.querySelectorAll('[name="'+t.name+'"]:checked').length>q.max){t.checked=false;err.textContent='You can choose only '+q.max+' for this question.'}}
+  if(t.name==='age'&&$('minor'))$('minor').style.display=/^13/.test(t.value)?'block':'none';
 });
-document.getElementById('why').addEventListener('input',function(){document.getElementById('cnt').textContent=this.value.trim().length+' / 150'});
-
+f.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset&&+t.dataset.min){var c=f.querySelector('[data-cnt="'+t.name+'"]');if(c)c.textContent=t.value.trim().length+' / '+t.dataset.min}
+});
 function submit(){
-  var d={};
-  ['name','email','whatsapp','gender','age','country','city','status','active','goal','why','blocker','outcome','ready','hours','contribute','before','heard','referredBy'].forEach(function(k){d[k]=(f[k].value||'').trim()});
-  d.areas=[].map.call(f.querySelectorAll('[name=areas]:checked'),function(x){return x.value});
-  d.whatsapp=d.whatsapp.replace(/[\s-]/g,'');
-  d.status_review='pending'; d.adminNote=''; d.createdAt=new Date().toISOString();
-  nextB.disabled=true; nextB.textContent='Submitting…';
+  var d={},labels={};
+  steps.forEach(function(s){s.querySelectorAll('.qw').forEach(function(w){
+    var k=w.dataset.key,t=w.dataset.type,v;
+    if(t==='radio'||t==='scale'){var c=w.querySelector('input:checked');v=c?c.value:''}
+    else if(t==='checkbox')v=[].map.call(w.querySelectorAll('input:checked'),function(x){return x.value});
+    else if(t==='agree')v=w.querySelector('input').checked;
+    else v=w.querySelector('input,select,textarea').value.trim();
+    d[k]=v;if(DEFAULT_KEYS.indexOf(k)<0)labels[k]=qOf(k).label;
+  })});
+  if(d.whatsapp)d.whatsapp=d.whatsapp.replace(/[\s-]/g,'');
+  d.labels=labels;d.status_review='pending';d.adminNote='';d.createdAt=new Date().toISOString();
+  nextB.disabled=true;nextB.textContent='Submitting…';
   var p=db?db.collection('luxora_applications').add(d):Promise.resolve(console.log('Demo mode, add FIREBASE_CONFIG to save:',d));
   p.then(function(){
-    f.style.display='none'; document.querySelector('.bar').style.display='none'; document.getElementById('sname').style.display='none';document.getElementById('stitle').style.display='none';document.querySelector('.fh').style.display='none';
-    document.getElementById('done').style.display='block';
+    f.style.display='none';document.querySelector('.bar').style.display='none';$('sname').style.display='none';$('stitle').style.display='none';document.querySelector('.fh').style.display='none';
+    $('done').style.display='block';
   }).catch(function(e){
-    console.error(e); nextB.disabled=false; nextB.textContent='Submit application';
+    console.error(e);nextB.disabled=false;nextB.textContent='Submit application';
     err.textContent='Your application did not send. Check your connection and submit again.';
   });
 }
-show(0,true);
+init();
+
 </script>
 </body>
 </html>
